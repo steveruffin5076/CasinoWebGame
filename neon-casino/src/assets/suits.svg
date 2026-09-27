@@ -1,0 +1,40 @@
+<!-- ==========================================================================
+     suits.svg — code-drawn playing-card suit symbols (sprite, injected once).
+     No external images, no hotlinking: pure vector paths.
+     ======================================================================= -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="suit-spade" viewBox="0 0 100 100">
+    <path d="M50 6C24 28 6 46 6 64c0 15 11 26 25 26 9 0 16-4 19-11 3 7 10 11 19 11 14 0 25-11 25-26 0-18-18-36-44-58z" />
+    <path d="M50 58c-3 12-9 22-19 30h38c-10-8-16-18-19-30z" />
+  </symbol>
+
+  <symbol id="suit-heart" viewBox="0 0 100 100">
+    <path d="M50 92C22 71 5 53 5 34 5 18 16 8 29 8c8 0 15 4 21 12 6-8 13-12 21-12 13 0 24 10 24 26 0 19-17 37-45 58z" />
+  </symbol>
+
+  <symbol id="suit-diamond" viewBox="0 0 100 100">
+    <path d="M50 3c4 0 7 2 10 5l32 37c4 5 5 8 5 11 0 5-3 9-8 15L58 94c-3 4-6 5-8 5s-5-1-8-5L11 71c-5-6-8-10-8-15 0-3 1-6 5-11L40 8c3-3 6-5 10-5z" />
+  </symbol>
+
+  <symbol id="suit-club" viewBox="0 0 100 100">
+    <circle cx="50" cy="28" r="19" />
+    <circle cx="26" cy="60" r="19" />
+    <circle cx="74" cy="60" r="19" />
+    <path d="M50 44c-3 12-9 22-19 30h38c-10-8-16-18-19-30z" />
+  </symbol>
+
+  <!-- Suit colour tints used by court cards -->
+  <linearGradient id="court-red" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#e0453f" />
+    <stop offset="1" stop-color="#9b1414" />
+  </linearGradient>
+  <linearGradient id="court-black" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3d4257" />
+    <stop offset="1" stop-color="#14161f" />
+  </linearGradient>
+  <linearGradient id="paper-grad" x1="0" y1="0" x2="0.4" y2="1">
+    <stop offset="0" stop-color="#ffffff" />
+    <stop offset="0.55" stop-color="#f7f5ef" />
+    <stop offset="1" stop-color="#e6e1d5" />
+  </linearGradient>
+</svg>

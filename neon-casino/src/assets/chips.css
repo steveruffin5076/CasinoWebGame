@@ -1,0 +1,168 @@
+/* =============================================================================
+   chips.css — 3D CSS casino chips. No images: conic gradients + shadows only.
+   Denominations: 10=white  50=red  100=blue  500=purple  1000=gold/black
+   ========================================================================== */
+
+.chip {
+  --cs: 54px; /* chip size (overridable) */
+  --c: #e8e8ef; /* body colour */
+  --e: #c9ccd8; /* edge stripe colour */
+  --t: #1b1d28; /* text colour */
+  position: relative;
+  width: var(--cs);
+  height: var(--cs);
+  border-radius: 50%;
+  flex: 0 0 auto;
+  /* edge stripes */
+  background: repeating-conic-gradient(
+    from 0deg,
+    #fdfdfd 0 9deg,
+    var(--e) 9deg 18deg
+  );
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 -3px 8px rgba(0, 0, 0, 0.35) inset;
+  will-change: transform;
+  transition: transform 0.18s var(--ease-out), filter 0.18s ease;
+}
+.chip::after {
+  /* gloss */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), transparent 46%);
+  pointer-events: none;
+}
+.chip .in {
+  position: absolute;
+  inset: 17%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.5), transparent 45%),
+    radial-gradient(circle at 50% 50%, var(--c) 0 62%, rgba(0, 0, 0, 0.18) 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.28),
+    inset 0 -2px 3px rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+.chip .in b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: calc(var(--cs) * 0.24);
+  letter-spacing: -0.02em;
+  color: var(--t);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.chip .in::before {
+  /* gold centre ring */
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.65);
+  box-shadow: inset 0 0 6px rgba(212, 175, 55, 0.35);
+}
+
+/* --- denominations ------------------------------------------------------- */
+.chip.c10 {
+  --c: #f2f3f7;
+  --e: #b9bccb;
+  --t: #1f2233;
+}
+.chip.c50 {
+  --c: #d13b3b;
+  --e: #8f1f1f;
+  --t: #fff2f2;
+}
+.chip.c100 {
+  --c: #2563eb;
+  --e: #123a86;
+  --t: #eaf2ff;
+}
+.chip.c500 {
+  --c: #7c3aed;
+  --e: #4c1d95;
+  --t: #f3e8ff;
+}
+.chip.c1000 {
+  --c: #171717;
+  --e: #d4af37;
+  --t: #f5e6b8;
+}
+.chip.c1000 .in {
+  background:
+    radial-gradient(circle at 34% 26%, rgba(245, 230, 184, 0.35), transparent 48%),
+    radial-gradient(circle at 50% 50%, #23201a 0 60%, #0b0a08 100%);
+}
+.chip .in b {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- chip stacks --------------------------------------------------------- */
+.chip-stack {
+  position: relative;
+  width: var(--cs, 54px);
+  height: var(--cs, 54px);
+}
+.chip-stack .chip {
+  position: absolute;
+  inset: 0;
+  animation: chipDrop 0.32s var(--ease-out) both;
+}
+@keyframes chipDrop {
+  from {
+    transform: translate3d(0, -26px, 0) scale(1.06);
+    opacity: 0.2;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* --- flying chip (bet / payout animation) -------------------------------- */
+.chip-fly {
+  position: fixed;
+  z-index: 850;
+  pointer-events: none;
+  transition:
+    transform 0.62s cubic-bezier(0.22, 0.85, 0.24, 1),
+    opacity 0.62s ease;
+  will-change: transform, opacity;
+}
+
+/* --- chip buttons in the bet rack ---------------------------------------- */
+.chip-btn {
+  position: relative;
+  border-radius: 50%;
+  padding: 0;
+  background: none;
+  transition: transform 0.16s var(--ease-out), filter 0.16s ease;
+}
+.chip-btn:active {
+  transform: scale(0.9);
+}
+.chip-btn:disabled {
+  filter: grayscale(0.7) brightness(0.7);
+  cursor: not-allowed;
+}
+.chip-btn.sel .chip {
+  transform: translateY(-10px) scale(1.04);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.6),
+    0 0 0 2px var(--gold),
+    0 0 22px rgba(212, 175, 55, 0.55);
+}
+.chip-btn .lbl {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--gold-hi);
+  text-shadow: 0 1px 3px #000;
+}

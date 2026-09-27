@@ -1,0 +1,115 @@
+/* =============================================================================
+   cards.css — playing-card chrome: paper, corner indices, pips, court art,
+   card backs, hand fan layouts, dealing/flipping transforms (GPU only).
+   ========================================================================== */
+
+.card .face {
+  background: linear-gradient(155deg, #ffffff 0%, #f7f5ef 55%, #e9e4d8 100%);
+}
+.card .face svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.card .back {
+  background: #131a2e;
+}
+.card .back svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* soft paper highlight */
+.card .face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.55), transparent 40%);
+  pointer-events: none;
+}
+.card.red .face {
+  color: #d3202a;
+}
+.card.black .face {
+  color: #1c2029;
+}
+
+/* --- 3D flip lives on the inner wrapper so .card keeps its transform ----- */
+.card .flipper {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.28s var(--ease-in-out);
+  will-change: transform;
+}
+.card.flipped .flipper {
+  transform: rotateY(180deg);
+}
+
+/* --- corner index is drawn inside the card SVG --- */
+
+/* --- interactivity ------------------------------------------------------- */
+.card.playable {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .card.playable:hover {
+    transform: translateY(-8px) scale(1.03);
+  }
+}
+.card.selected {
+  transform: translateY(-12px);
+}
+
+/* --- hand fan ------------------------------------------------------------ */
+.hand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: calc(var(--ch, 104px) * 1.35);
+  width: 520px;
+}
+
+/* --- chip / result glow ring for a winning hand -------------------------- */
+.win-ring {
+  position: absolute;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 2px var(--gold),
+    0 0 26px 6px rgba(212, 175, 55, 0.45);
+  animation: winRing 1.4s ease-in-out infinite;
+}
+@keyframes winRing {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --- tiny pips used inside bot "hole card" placeholders ------------------ */
+.mini-card {
+  position: relative;
+  width: 26px;
+  height: 36px;
+  border-radius: 5px;
+  background: linear-gradient(150deg, #1b2440, #0a0e1a);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.mini-card::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 3px;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(212, 175, 55, 0.5) 0 20deg,
+    transparent 20deg 40deg
+  );
+  opacity: 0.5;
+}

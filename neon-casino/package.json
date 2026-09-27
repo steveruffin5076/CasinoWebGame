@@ -1,0 +1,17 @@
+{
+  "name": "neon-casino",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Neon Casino — a luxury neon Vegas casino web game (Blackjack, Texas Hold'em, Hong Kong Mahjong, UNO) built with Vite + TypeScript. Offline-first, single-player vs AI bots, virtual chips only.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,376 @@
+/* =============================================================================
+   lobby.css — casino floor: neon hero, floating suit particles, game cards.
+   ========================================================================== */
+
+.view[data-route='lobby'] {
+  overflow: hidden;
+}
+
+/* ------------------------------- TOP BAR ---------------------------------- */
+.topbar {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: calc(8px + var(--safe-t)) 12px 8px;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  flex: 0 0 auto;
+}
+.tb-left,
+.tb-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.tb-title .t {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gold-hi);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tb-title .s {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-neon {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4.6vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff3cf;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 12px var(--gold),
+    0 0 28px rgba(212, 175, 55, 0.8),
+    0 0 60px rgba(212, 175, 55, 0.4);
+  animation: neonFlicker 5.5s infinite;
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .brand-neon {
+    font-size: 17px;
+    letter-spacing: 0.08em;
+  }
+  .tb-title .t {
+    font-size: 15px;
+  }
+}
+
+/* ------------------------------ SCROLL AREA ------------------------------- */
+.lobby-scroll {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 12px calc(24px + var(--safe-b));
+}
+
+/* --------------------------------- HERO ----------------------------------- */
+.hero {
+  position: relative;
+  max-width: 1200px;
+  margin: 6px auto 14px;
+  padding: clamp(18px, 4vw, 34px) 16px;
+  text-align: center;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 50% -20%, rgba(212, 175, 55, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  border: 1px solid var(--stroke);
+}
+.hero .sign {
+  font-size: clamp(32px, 9.5vw, 78px);
+  line-height: 1.02;
+  margin: 0;
+}
+.hero .tag {
+  margin-top: 10px;
+  font-size: clamp(12px, 2.6vw, 15px);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.hero .underline {
+  width: min(420px, 76%);
+  height: 2px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
+}
+/* floating suit particles (GPU transforms only, cap 40) */
+.suit-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.suit-field span {
+  position: absolute;
+  bottom: -40px;
+  font-size: 22px;
+  opacity: 0.16;
+  will-change: transform;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.2;
+  }
+  88% {
+    opacity: 0.16;
+  }
+  100% {
+    transform: translate3d(var(--dx, 30px), -560px, 0) rotate(var(--rot, 220deg));
+    opacity: 0;
+  }
+}
+.lowfx .suit-field {
+  display: none;
+}
+
+/* ------------------------------ GAME GRID --------------------------------- */
+.games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+  gap: 14px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (max-width: 380px) {
+  .games {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.gcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    transform var(--t-mid) var(--ease-out),
+    box-shadow var(--t-mid) ease,
+    border-color var(--t-mid) ease;
+  will-change: transform;
+}
+.gcard .art {
+  position: relative;
+  height: clamp(96px, 22vw, 132px);
+  overflow: hidden;
+}
+.gcard .art svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.gcard .art::after {
+  /* gloss sweep */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.9s var(--ease-out);
+}
+.gcard .body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+.gcard .hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.gcard h3 {
+  font-size: 21px;
+  color: var(--gold-hi);
+}
+.gcard .emo {
+  font-size: 20px;
+}
+.gcard .desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  min-height: 36px;
+}
+.gcard .meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+/* difficulty segmented control */
+.seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.seg button {
+  min-height: 32px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: all var(--t-fast) ease;
+}
+.seg button[aria-pressed='true'] {
+  color: #2b1e04;
+  background: var(--gold-grad);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.35);
+}
+.gcard .play {
+  width: 100%;
+  margin-top: auto;
+}
+.gcard .info {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gold-hi);
+  background: rgba(8, 10, 20, 0.6);
+  border: 1px solid var(--stroke);
+}
+@media (hover: hover) {
+  .gcard:hover {
+    transform: translateY(-6px) rotateX(2deg);
+    border-color: var(--stroke-strong);
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(212, 175, 55, 0.35),
+      0 0 40px rgba(212, 175, 55, 0.18);
+  }
+  .gcard:hover .art::after {
+    transform: translateX(120%);
+  }
+}
+.gcard:active {
+  transform: scale(0.985);
+}
+
+/* ------------------------------ STATS STRIP ------------------------------- */
+.stats {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+.stat {
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.stat .v {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4.4vw, 24px);
+  font-weight: 800;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+}
+.stat .k {
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lobby-foot {
+  max-width: 1200px;
+  margin: 12px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.disclaimer {
+  max-width: 1200px;
+  margin: 14px auto 0;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted-2);
+}
+
+/* ------------------------------ BONUS BUTTON ------------------------------ */
+.btn-bonus {
+  position: relative;
+  overflow: hidden;
+  color: #2b1e04;
+  background: linear-gradient(180deg, #ffe9a8, #d4af37 60%, #a8842a);
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4);
+}
+.btn-bonus:disabled {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.btn-bonus.ready {
+  animation: btnPulse 1.9s ease-in-out infinite;
+}
+
+/* ------------------------------- GAME RULES ------------------------------- */
+.rules {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
+}
+.rules li {
+  margin-bottom: 5px;
+}
+.rules li::marker {
+  color: var(--gold);
+}
+.modal-body.mb {
+  font-size: 14px;
+  line-height: 1.55;
+}

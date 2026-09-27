@@ -1,0 +1,166 @@
+<!-- ==========================================================================
+     unoFaces.svg — UNO symbol artwork (skip / reverse / +2 / wild / +4).
+     Colour-blind friendly: every colour also carries a distinct icon shape.
+     ======================================================================= -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="uno-skip" viewBox="0 0 100 140">
+    <circle cx="50" cy="70" r="34" fill="none" stroke="currentColor" stroke-width="11" />
+    <path d="M26 46 L74 94" stroke="currentColor" stroke-width="12" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="uno-reverse" viewBox="0 0 100 140">
+    <path
+      d="M22 52 h34 a12 12 0 0 1 0 24 h-8"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path d="M22 52 l14 -13 v26 z" fill="currentColor" />
+    <path
+      d="M78 92 h-34 a12 12 0 0 1 0 -24 h8"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path d="M78 92 l-14 13 v-26 z" fill="currentColor" />
+  </symbol>
+
+  <symbol id="uno-draw2" viewBox="0 0 100 140">
+    <g>
+      <rect x="16" y="30" width="30" height="46" rx="4" fill="currentColor" transform="rotate(-13 31 53)" />
+      <rect
+        x="34"
+        y="44"
+        width="30"
+        height="46"
+        rx="4"
+        fill="#fff"
+        stroke="#0b0b12"
+        stroke-width="2.5"
+        transform="rotate(-13 49 67)"
+      />
+      <text
+        x="49"
+        y="76"
+        text-anchor="middle"
+        font-family="Georgia, serif"
+        font-size="26"
+        font-weight="700"
+        fill="#0b0b12"
+        transform="rotate(-13 49 67)"
+      >
+        2
+      </text>
+    </g>
+    <g transform="translate(38 20)">
+      <circle cx="0" cy="0" r="20" fill="#fff" stroke="#0b0b12" stroke-width="3" />
+      <path
+        d="M0 -12 v24 M-12 0 h24"
+        stroke="#0b0b12"
+        stroke-width="6"
+        stroke-linecap="round"
+      />
+    </g>
+  </symbol>
+
+  <symbol id="uno-wild" viewBox="0 0 100 140">
+    <g transform="translate(50 70)">
+      <circle r="33" fill="none" stroke="currentColor" stroke-width="10" />
+      <path d="M-33 0 A33 33 0 0 1 0 -33 L0 0 Z" fill="#ef4444" />
+      <path d="M0 -33 A33 33 0 0 1 33 0 L0 0 Z" fill="#eab308" />
+      <path d="M33 0 A33 33 0 0 1 0 33 L0 0 Z" fill="#22c55e" />
+      <path d="M0 33 A33 33 0 0 1 -33 0 L0 0 Z" fill="#3b82f6" />
+    </g>
+    <text
+      x="50"
+      y="82"
+      text-anchor="middle"
+      font-family="Georgia, serif"
+      font-size="30"
+      font-weight="700"
+      fill="#fff"
+      stroke="#0b0b12"
+      stroke-width="4"
+      paint-order="stroke"
+    >
+      W
+    </text>
+  </symbol>
+
+  <symbol id="uno-draw4" viewBox="0 0 100 140">
+    <g transform="translate(50 72)">
+      <rect x="-30" y="-26" width="26" height="40" rx="4" fill="#ef4444" transform="rotate(-13 -17 -6)" />
+      <rect
+        x="-14"
+        y="-14"
+        width="26"
+        height="40"
+        rx="4"
+        fill="#eab308"
+        transform="rotate(-13 -1 6)"
+      />
+      <rect
+        x="2"
+        y="-2"
+        width="26"
+        height="40"
+        rx="4"
+        fill="#22c55e"
+        transform="rotate(-13 15 18)"
+      />
+      <rect
+        x="-30"
+        y="-26"
+        width="26"
+        height="40"
+        rx="4"
+        fill="none"
+        stroke="#0b0b12"
+        stroke-width="2"
+        transform="rotate(-13 -17 -6)"
+      />
+      <rect
+        x="-14"
+        y="-14"
+        width="26"
+        height="40"
+        rx="4"
+        fill="none"
+        stroke="#0b0b12"
+        stroke-width="2"
+        transform="rotate(-13 -1 6)"
+      />
+      <rect
+        x="2"
+        y="-2"
+        width="26"
+        height="40"
+        rx="4"
+        fill="none"
+        stroke="#0b0b12"
+        stroke-width="2"
+        transform="rotate(-13 15 18)"
+      />
+    </g>
+    <g transform="translate(50 30)">
+      <circle r="17" fill="#fff" stroke="#0b0b12" stroke-width="3" />
+      <path d="M0 -10 v20 M-10 0 h20" stroke="#0b0b12" stroke-width="5" stroke-linecap="round" />
+    </g>
+    <text
+      x="76"
+      y="46"
+      text-anchor="middle"
+      font-family="Georgia, serif"
+      font-size="26"
+      font-weight="700"
+      fill="#fff"
+      stroke="#0b0b12"
+      stroke-width="4"
+      paint-order="stroke"
+    >
+      4
+    </text>
+  </symbol>
+</svg>

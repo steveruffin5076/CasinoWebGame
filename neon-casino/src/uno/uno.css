@@ -1,0 +1,330 @@
+/* =============================================================================
+   uno.css — the UNO arena: dark purple table, ambient colour flood that
+   follows the active colour, tilted discard stack, fanned hand.
+   ========================================================================== */
+
+.view[data-route='uno'] .stage-wrap {
+  touch-action: none;
+}
+
+/* whole-table ambient tint, transitions on colour change (400ms) */
+.uno-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.4s ease, opacity 0.4s ease;
+  opacity: 0.85;
+}
+
+.uno-table {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 920px;
+  height: 600px;
+  border-radius: 40px;
+  background:
+    radial-gradient(80% 90% at 50% 10%, rgba(232, 121, 249, 0.14), transparent 55%),
+    linear-gradient(180deg, #3b1a80 0%, var(--uno-bg) 62%, #1a0b40 100%);
+  box-shadow:
+    0 0 0 13px #1c0b3f,
+    0 0 0 16px #120729,
+    0 0 0 23px rgba(28, 11, 63, 0.55),
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 100px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.uno-table::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), transparent 32%, transparent 68%, rgba(255, 255, 255, 0.04));
+  pointer-events: none;
+}
+.uno-table .ring-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 430px;
+  height: 430px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px dashed rgba(232, 121, 249, 0.25);
+  pointer-events: none;
+}
+.uno-table .ring-mark::before {
+  content: '';
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(212, 175, 55, 0.22);
+}
+
+/* colour indicator chip on the table */
+.uno-color-orb {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 4px #000;
+  box-shadow: 0 0 30px 8px var(--glow, rgba(232, 121, 249, 0.4));
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* draw pile + discard */
+.uno-deck {
+  position: absolute;
+  width: 96px;
+  height: 144px;
+  transform: translate(-50%, -50%);
+  border-radius: 14px;
+  background: linear-gradient(150deg, #1b2440, #0a0e1a);
+  border: 2px solid rgba(212, 175, 55, 0.8);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.16s var(--ease-out), box-shadow 0.16s ease;
+}
+.uno-deck::before {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 18px;
+  border: 2px solid rgba(212, 175, 55, 0.35);
+  opacity: 0.8;
+}
+.uno-deck::after {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 22px;
+  border: 2px solid rgba(212, 175, 55, 0.18);
+}
+.uno-deck .count {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--gold-hi);
+  white-space: nowrap;
+  text-shadow: 0 1px 4px #000;
+}
+.uno-deck .em {
+  font-size: 34px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+.uno-deck.pulse {
+  animation: unoPulse 1.7s ease-in-out infinite;
+}
+@keyframes unoPulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6), 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6), 0 0 0 12px rgba(212, 175, 55, 0);
+  }
+}
+.uno-deck:active {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+/* hand fans */
+.uno-hand-zone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.uno-card {
+  position: absolute;
+  width: var(--uw, 78px);
+  height: var(--uh, 117px);
+  border-radius: 10px;
+  will-change: transform;
+  transition: transform 0.22s var(--ease-out), filter 0.2s ease;
+  pointer-events: auto;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.uno-card svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+}
+.uno-card.playable {
+  cursor: pointer;
+}
+.uno-card.playable::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 13px;
+  border: 2px solid rgba(245, 230, 184, 0.85);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .uno-card.playable:hover {
+    transform: translate3d(var(--tx, 0), calc(var(--ty, 0px) - 22px), 0) rotate(var(--rot, 0deg)) scale(1.07) !important;
+  }
+  .uno-card.playable:hover::after {
+    opacity: 1;
+  }
+}
+.uno-card.dim {
+  filter: grayscale(0.55) brightness(0.62);
+}
+.uno-card.shake {
+  animation: unoShake 0.5s ease;
+}
+@keyframes unoShake {
+  0%, 100% { margin-left: 0; }
+  20% { margin-left: -7px; }
+  40% { margin-left: 7px; }
+  60% { margin-left: -5px; }
+  80% { margin-left: 5px; }
+}
+/* bot mini hands */
+.uno-bot-cards {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.uno-bot-cards i {
+  width: 16px;
+  height: 24px;
+  border-radius: 3px;
+  background: linear-gradient(150deg, #2a2f45, #10131f);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* direction indicator */
+.uno-dir {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: rgba(245, 230, 184, 0.8);
+  text-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
+  pointer-events: none;
+}
+.uno-dir.ccw {
+  transform: translate(-50%, -50%) scaleX(-1);
+}
+.uno-dir.spin {
+  animation: dirSpin 2.6s linear infinite;
+}
+.uno-dir.spin.ccw {
+  animation-name: dirSpinCCW;
+}
+@keyframes dirSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes dirSpinCCW {
+  to {
+    transform: translate(-50%, -50%) scaleX(-1) rotate(360deg);
+  }
+}
+
+/* UNO button */
+.btn-uno {
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  color: #2b1e04;
+  background: var(--gold-grad);
+}
+.btn-uno.urgent {
+  animation: unoBtn 0.8s ease-in-out infinite;
+}
+@keyframes unoBtn {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 14px rgba(212, 175, 55, 0);
+  }
+}
+
+/* colour picker modal */
+.uno-pick {
+  display: grid;
+  grid-template-columns: repeat(2, 92px);
+  gap: 12px;
+  justify-content: center;
+}
+.uno-pick button {
+  height: 74px;
+  border-radius: 16px;
+  font-size: 30px;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.14s var(--ease-out), filter 0.14s ease;
+}
+.uno-pick button:active {
+  transform: scale(0.93);
+}
+.uno-pick button:nth-child(1) { background: linear-gradient(180deg, #ff6b6b, #b91c1c); }
+.uno-pick button:nth-child(2) { background: linear-gradient(180deg, #fde68a, #ca8a04); }
+.uno-pick button:nth-child(3) { background: linear-gradient(180deg, #6ee7a8, #15803d); }
+.uno-pick button:nth-child(4) { background: linear-gradient(180deg, #7dd3fc, #1d4ed8); }
+
+/* hand count + sort toggle */
+.uno-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* scoreboard rows (round-end modal) */
+.score-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.score-row.me {
+  border-color: var(--stroke-strong);
+  background: rgba(212, 175, 55, 0.12);
+}
+.score-row b {
+  font-family: var(--font-display);
+  color: var(--gold-hi);
+  font-size: 17px;
+}

@@ -1,0 +1,62 @@
+name: Deploy Neon Casino to GitHub Pages
+
+# Repo-root workflow: the project lives in the neon-casino/ sub-folder.
+# (A copy tuned for a standalone neon-casino repo sits at
+#  neon-casino/.github/workflows/deploy.yml — only this one is active when the
+#  whole CasinoWebGame repo is pushed.)
+#
+# To enable: Settings -> Pages -> Source: "GitHub Actions" (one-time manual step).
+# Public URL afterwards: https://<USERNAME>.github.io/<REPO_NAME>/
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deploy at a time; never cancel an in-flight deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: neon-casino/package-lock.json
+
+      - name: Install dependencies
+        working-directory: neon-casino
+        run: npm ci
+
+      - name: Type check + build
+        working-directory: neon-casino
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: neon-casino/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,360 @@
+/* =============================================================================
+   mahjong.css — jade + bamboo table, ivory tiles with 3D bevel, river grid.
+   Virtual stage 1000 x 700.
+   ========================================================================== */
+
+.view[data-route='mahjong'] .stage-wrap {
+  touch-action: none;
+}
+
+.mj-table {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 950px;
+  height: 620px;
+  border-radius: 34px;
+  background:
+    radial-gradient(85% 100% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 55%),
+    radial-gradient(120% 130% at 50% 55%, #1c6b3c 0%, var(--jade-0) 45%, #0a2b17 100%);
+  box-shadow:
+    0 0 0 13px var(--bamboo),
+    0 0 0 16px #2a1504,
+    0 0 0 23px rgba(66, 32, 6, 0.5),
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 100px rgba(0, 0, 0, 0.45);
+}
+/* bamboo rim texture */
+.mj-table::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 40px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(66, 32, 6, 0.9) 0 26px,
+    rgba(43, 20, 3, 0.9) 26px 30px,
+    rgba(94, 47, 10, 0.65) 30px 54px,
+    rgba(43, 20, 3, 0.9) 54px 58px
+  );
+  z-index: -1;
+}
+.mj-table::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 34px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), transparent 32%, transparent 68%, rgba(255, 255, 255, 0.04));
+  pointer-events: none;
+}
+
+/* centre: wind disc + wall count */
+.mj-centre {
+  position: absolute;
+  left: 50%;
+  top: 128px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  pointer-events: none;
+}
+.mj-wind-disc {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 36% 30%, #2a8a50, #14532d 60%, #0a2b17);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 22px rgba(212, 175, 55, 0.35), inset 0 0 14px rgba(0, 0, 0, 0.5);
+}
+.mj-wind-disc .w {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gold-hi);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+.mj-wind-disc .lbl {
+  position: absolute;
+  bottom: -20px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.mj-wall-count {
+  text-align: center;
+}
+.mj-wall-count .n {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--gold-hi);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+.mj-wall-count .l {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* discard river */
+.mj-river {
+  position: absolute;
+  left: 50%;
+  top: 330px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: repeat(6, 44px);
+  grid-auto-rows: 58px;
+  gap: 5px;
+}
+.mj-river .slot {
+  width: 44px;
+  height: 58px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px dashed rgba(250, 247, 239, 0.14);
+}
+
+/* ------------------------------- tiles ------------------------------------ */
+.mj-tile {
+  position: relative;
+  width: var(--tw, 48px);
+  height: var(--th, 64px);
+  border-radius: 7px;
+  background: var(--ivory);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 2px 0 3px rgba(255, 255, 255, 0.45),
+    inset -2px -3px 4px rgba(120, 105, 70, 0.35),
+    inset 0 -4px 5px rgba(120, 100, 60, 0.3);
+  transition: transform 0.16s var(--ease-out), box-shadow 0.16s ease, opacity 0.2s ease;
+  will-change: transform;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.mj-tile svg {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+}
+.mj-tile::after {
+  /* side depth (3D bevel) */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 5px;
+  border-radius: 0 0 7px 7px;
+  background: linear-gradient(180deg, #d6cdb2, #b3a888);
+  z-index: -1;
+}
+.mj-tile.sel {
+  transform: translateY(-14px);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.6),
+    0 0 0 2px var(--gold),
+    0 0 22px rgba(212, 175, 55, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9);
+  z-index: 5;
+}
+.mj-tile.dim {
+  filter: grayscale(0.4) brightness(0.85);
+}
+@media (hover: hover) {
+  .mj-hand-row .mj-tile:hover {
+    transform: translateY(-8px);
+  }
+  .mj-hand-row .mj-tile.sel:hover {
+    transform: translateY(-14px);
+  }
+}
+
+/* your hand row */
+.mj-hand-row {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+}
+.mj-hand-row.sorting {
+  animation: mjSort 0.4s var(--ease-out);
+}
+@keyframes mjSort {
+  0% {
+    filter: brightness(1.4);
+  }
+}
+/* melds row (exposed sets) */
+.mj-melds {
+  position: absolute;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.mj-melds .grp {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(250, 247, 239, 0.22);
+}
+.mj-melds .grp.kong {
+  border-color: rgba(212, 175, 55, 0.55);
+}
+.mj-melds .grp .mj-tile {
+  --tw: 30px;
+  --th: 40px;
+  cursor: default;
+}
+
+/* bot hands: tile-back stacks */
+.mj-bot-tiles {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 2.5px;
+}
+.mj-bot-tiles i {
+  width: 18px;
+  height: 25px;
+  border-radius: 3.5px;
+  background: linear-gradient(160deg, #f4eedd, #d9d0b8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 1px 1px #fff;
+  position: relative;
+}
+.mj-bot-tiles i::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 2px;
+  background: linear-gradient(150deg, #1c6b3c, #0a2b17);
+  opacity: 0.85;
+}
+.mj-bot-tiles.horiz {
+  flex-direction: column;
+}
+.mj-bot-tiles.horiz i {
+  width: 25px;
+  height: 18px;
+}
+
+/* bot melds (small) */
+.mj-bot-melds {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 6px;
+}
+.mj-bot-melds .grp {
+  display: flex;
+  gap: 1.5px;
+}
+.mj-bot-melds .grp i {
+  width: 14px;
+  height: 19px;
+  border-radius: 2.5px;
+  background: linear-gradient(160deg, #f4eedd, #d9d0b8);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* flying tile */
+.mj-fly {
+  position: fixed;
+  z-index: 860;
+  pointer-events: none;
+}
+
+/* call bar with countdown */
+.mj-call-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: var(--r-lg);
+  background: rgba(8, 10, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.mj-timer {
+  width: 120px;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.mj-timer i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-hi));
+  transition: width 0.1s linear;
+}
+.mj-timer.low i {
+  background: linear-gradient(90deg, var(--red), #fca5a5);
+}
+
+/* fan breakdown modal table */
+.fan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.fan-table td {
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.fan-table td:last-child {
+  text-align: right;
+  font-weight: 800;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+}
+.fan-table tr.total td {
+  border-bottom: none;
+  padding-top: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gold-hi);
+}
+
+/* leaderboard */
+.lb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  margin-bottom: 6px;
+}
+.lb-row.me {
+  border-color: var(--stroke-strong);
+  background: rgba(212, 175, 55, 0.12);
+}
+.lb-row .rank {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--gold-hi);
+  width: 34px;
+}
+.lb-row b {
+  font-variant-numeric: tabular-nums;
+}

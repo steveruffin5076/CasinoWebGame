@@ -1,0 +1,99 @@
+<!-- ==========================================================================
+     cardsBack.svg — deep navy card back with gold geometric lattice + diamond
+     logo. Drawn entirely with SVG geometry (no bitmaps, no external files).
+     viewBox matches the card front (100 x 140) so it drops straight into .card.
+     ======================================================================= -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 140"
+  preserveAspectRatio="none"
+  width="100%"
+  height="100%"
+  aria-hidden="true"
+>
+  <defs>
+    <linearGradient id="cb-bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#1b2440" />
+      <stop offset="0.5" stop-color="#131a2e" />
+      <stop offset="1" stop-color="#0a0e1a" />
+    </linearGradient>
+    <linearGradient id="cb-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5e6b8" />
+      <stop offset="0.45" stop-color="#d4af37" />
+      <stop offset="1" stop-color="#8c6d1f" />
+    </linearGradient>
+    <pattern id="cb-lattice" width="12" height="12" patternUnits="userSpaceOnUse">
+      <path
+        d="M6 0 L12 6 L6 12 L0 6 Z"
+        fill="none"
+        stroke="#d4af37"
+        stroke-opacity="0.30"
+        stroke-width="0.7"
+      />
+      <path d="M0 0 L12 12 M12 0 L0 12" stroke="#d4af37" stroke-opacity="0.13" stroke-width="0.5" />
+      <circle cx="6" cy="6" r="0.9" fill="#d4af37" fill-opacity="0.22" />
+    </pattern>
+    <radialGradient id="cb-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d4af37" stop-opacity="0.32" />
+      <stop offset="1" stop-color="#d4af37" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="100" height="140" rx="9" fill="url(#cb-bg)" />
+  <rect x="0" y="0" width="100" height="140" rx="9" fill="url(#cb-lattice)" />
+  <!-- inner gold frame -->
+  <rect
+    x="3.5"
+    y="3.5"
+    width="93"
+    height="133"
+    rx="7"
+    fill="none"
+    stroke="url(#cb-gold)"
+    stroke-width="1.1"
+    stroke-opacity="0.85"
+  />
+  <rect
+    x="6.5"
+    y="6.5"
+    width="87"
+    height="127"
+    rx="5.5"
+    fill="none"
+    stroke="#d4af37"
+    stroke-opacity="0.28"
+    stroke-width="0.6"
+  />
+  <!-- centre medallion -->
+  <circle cx="50" cy="70" r="26" fill="url(#cb-glow)" />
+  <g transform="translate(50 70)">
+    <path
+      d="M0 -19 L14 0 L0 19 L-14 0 Z"
+      fill="none"
+      stroke="url(#cb-gold)"
+      stroke-width="1.4"
+    />
+    <path d="M0 -12 L9 0 L0 12 L-9 0 Z" fill="url(#cb-gold)" opacity="0.85" />
+    <path d="M0 -12 L9 0 L0 0 Z" fill="#f5e6b8" opacity="0.6" />
+    <path d="M0 12 L-9 0 L0 0 Z" fill="#8c6d1f" opacity="0.5" />
+    <circle cx="0" cy="0" r="3.2" fill="#0a0e1a" stroke="#f5e6b8" stroke-width="0.8" />
+  </g>
+  <!-- corner flourishes -->
+  <g fill="none" stroke="#d4af37" stroke-opacity="0.55" stroke-width="0.8">
+    <path d="M9 20 L9 9 L20 9" />
+    <path d="M91 20 L91 9 L80 9" />
+    <path d="M9 120 L9 131 L20 131" />
+    <path d="M91 120 L91 131 L80 131" />
+  </g>
+  <rect
+    x="0"
+    y="0"
+    width="100"
+    height="140"
+    rx="9"
+    fill="none"
+    stroke="#000"
+    stroke-opacity="0.5"
+    stroke-width="1"
+  />
+</svg>
