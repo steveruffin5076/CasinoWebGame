@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview --base /casinowebgame/"
+    "preview": "vite preview --base /CasinoWebGame/"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

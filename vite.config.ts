@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 
-// Replace casinowebgame with your GitHub repo name for GitHub Pages sub-path deploy.
+// GitHub Pages sub-path — must match your repo name (see Settings → Pages).
 export default defineConfig({
-  base: '/casinowebgame/',
+  base: '/CasinoWebGame/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

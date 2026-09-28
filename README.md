@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173/casinowebgame/`).
+Open the URL Vite prints (usually `http://localhost:5173/CasinoWebGame/`).
 
 ## Build
 
@@ -30,11 +30,11 @@ Output is in `dist/`.
 3. On each push to `main`, `.github/workflows/deploy.yml` runs `npm ci`, `npm run build`, and deploys `dist/`.
 
 Public URL: `https://<USERNAME>.github.io/<REPO_NAME>/`  
-For this repo: `https://steveruffin5076.github.io/casinowebgame/`
+For this repo: `https://steveruffin5076.github.io/CasinoWebGame/`
 
 ### Base path
 
-`vite.config.ts` sets `base: '/casinowebgame/'`. Change it to match your repository name.
+`vite.config.ts` sets `base: '/CasinoWebGame/'`. Change it to match your repository name.
 
 ## Features
 
