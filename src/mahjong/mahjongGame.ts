@@ -17,14 +17,14 @@ interface MJPlayer {
 
 export function mountMahjong(root: HTMLElement): () => void {
   const shell = document.createElement('div');
-  shell.className = 'game-shell';
+  shell.className = 'game-shell theme-mahjong';
   shell.innerHTML = `<div class="game-header"><button class="btn btn-small" id="mj-back">← Lobby</button><h2>🀄 Hong Kong Mahjong</h2><button class="btn btn-small" id="mj-leave">Leave</button></div><div class="game-stage" id="mj-stage"></div><div class="info-bar" id="mj-info">No Flowers — 136 tiles</div><div class="game-controls" id="mj-ctrl"></div>`;
   root.appendChild(shell);
 
   const stage = shell.querySelector('#mj-stage') as HTMLElement;
   const info = shell.querySelector('#mj-info') as HTMLElement;
   const ctrl = shell.querySelector('#mj-ctrl') as HTMLElement;
-  const host = new GameHost(stage);
+  const host = new GameHost(stage, '#2a6b5a');
 
   let wall: MahjongTile[] = [];
   let players: MJPlayer[] = [];
@@ -231,7 +231,7 @@ export function mountMahjong(root: HTMLElement): () => void {
   }
 
   host.start((ctx, _dt, w, h) => {
-    ctx.fillStyle = '#1a2840';
+    ctx.fillStyle = '#2a6b5a';
     ctx.fillRect(0, 0, w, h);
     const tw = Math.min(36, w * 0.09);
     const th = tw * 1.25;

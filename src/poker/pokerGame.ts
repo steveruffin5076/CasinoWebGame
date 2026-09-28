@@ -22,7 +22,7 @@ type Street = 'preflop' | 'flop' | 'turn' | 'river' | 'showdown';
 
 export function mountPoker(root: HTMLElement): () => void {
   const shell = document.createElement('div');
-  shell.className = 'game-shell';
+  shell.className = 'game-shell theme-poker';
   shell.innerHTML = `<div class="game-header"><button class="btn btn-small" id="pk-back">← Lobby</button><h2>♥️ Texas Hold'em</h2><span id="pk-pot"></span></div><div class="game-stage" id="pk-stage"></div><div class="info-bar" id="pk-info"></div><div class="game-controls" id="pk-ctrl"></div>`;
   root.appendChild(shell);
 
@@ -30,7 +30,7 @@ export function mountPoker(root: HTMLElement): () => void {
   const info = shell.querySelector('#pk-info') as HTMLElement;
   const ctrl = shell.querySelector('#pk-ctrl') as HTMLElement;
   const potEl = shell.querySelector('#pk-pot') as HTMLElement;
-  const host = new GameHost(stage);
+  const host = new GameHost(stage, '#1a5c3a');
 
   let deck: PlayingCard[] = [];
   let players: PokerPlayer[] = [];
@@ -251,7 +251,7 @@ export function mountPoker(root: HTMLElement): () => void {
     if (winner.human) {
       recordWin(pot, 'poker');
       playWin();
-      host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 60, ['#ffd54f', '#ff2bd6']);
+      host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 60, ['#c9a227', '#fff']);
       addChips(pot);
     }
     pot = 0;
@@ -266,7 +266,7 @@ export function mountPoker(root: HTMLElement): () => void {
   }
 
   host.start((ctx, _dt, w, h) => {
-    ctx.fillStyle = '#0a3d2e';
+    ctx.fillStyle = '#1a5c3a';
     ctx.fillRect(0, 0, w, h);
     const cw = Math.min(44, w * 0.07);
     const ch = cw * 1.4;

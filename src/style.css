@@ -1,12 +1,15 @@
 :root {
-  --bg: #0a0014;
-  --panel: #150828;
-  --neon-pink: #ff2bd6;
-  --neon-cyan: #00f5ff;
-  --neon-gold: #ffd54f;
-  --text: #f0e8ff;
-  --muted: #9a8ab8;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  --bg: #1a1209;
+  --panel: #2a1f14;
+  --accent-gold: #c9a227;
+  --accent-cream: #f5ecd7;
+  --text: #f5ecd7;
+  --muted: #a89878;
+  --btn-border: #8b7355;
+  --btn-bg: #3d2e1f;
+  --btn-primary-bg: #1b6b3a;
+  --btn-primary-border: #145a2e;
+  font-family: 'Segoe UI', Georgia, system-ui, sans-serif;
 }
 
 * {
@@ -17,22 +20,25 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
-  background: radial-gradient(ellipse at top, #1a0530 0%, var(--bg) 55%);
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #3d1515 0%, #1a1209 40%, #0f0c08 100%);
   color: var(--text);
-  overflow-x: hidden;
 }
 
 #app {
-  min-height: 100vh;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: #0a0014ee;
+  background: #1a1209ee;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,22 +55,23 @@ body {
 }
 
 .loading-panel h1 {
-  color: var(--neon-pink);
-  text-shadow: 0 0 20px var(--neon-pink);
+  color: var(--accent-gold);
+  font-weight: 600;
 }
 
 .loading-bar {
   height: 8px;
-  background: #2a1540;
+  background: #2a1f14;
   border-radius: 4px;
   overflow: hidden;
   margin: 1rem 0;
+  border: 1px solid #5c4a32;
 }
 
 .loading-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+  background: linear-gradient(90deg, #8b6914, #c9a227);
   transition: width 0.15s;
 }
 
@@ -75,16 +82,16 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: #120020cc;
-  border-bottom: 1px solid #ff2bd633;
-  position: sticky;
-  top: 0;
+  padding-top: max(10px, env(safe-area-inset-top));
+  background: linear-gradient(180deg, #4a1818, #2d1010);
+  border-bottom: 2px solid #8b6914;
+  flex-shrink: 0;
   z-index: 10;
 }
 
 .chip-balance {
   font-weight: 700;
-  color: var(--neon-gold);
+  color: var(--accent-gold);
   font-size: 1.1rem;
 }
 
@@ -92,10 +99,10 @@ body {
   min-height: 44px;
   min-width: 44px;
   padding: 8px 14px;
-  border: 1px solid var(--neon-cyan);
-  background: #1a0a30;
-  color: var(--text);
-  border-radius: 10px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--accent-cream);
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
   touch-action: manipulation;
@@ -106,9 +113,10 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ff2bd6, #7b2ff7);
-  border-color: transparent;
+  background: linear-gradient(180deg, #228b4a, #1b6b3a);
+  border-color: var(--btn-primary-border);
   font-weight: 600;
+  color: #fff;
 }
 
 .btn-small {
@@ -118,23 +126,29 @@ body {
 }
 
 .btn.active {
-  box-shadow: 0 0 12px var(--neon-cyan);
+  background: #5c4a32;
+  border-color: var(--accent-gold);
+  color: #fff;
 }
 
 .lobby {
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 12px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .lobby-title {
   text-align: center;
   margin: 8px 0 16px;
   font-size: clamp(1.5rem, 5vw, 2.2rem);
-  color: var(--neon-pink);
-  text-shadow: 0 0 24px #ff2bd680;
+  color: var(--accent-gold);
+  font-weight: 600;
 }
 
 .game-grid {
@@ -144,14 +158,14 @@ body {
 }
 
 .game-card {
-  background: var(--panel);
-  border: 1px solid #ff2bd644;
-  border-radius: 14px;
+  background: linear-gradient(145deg, #352818, #2a1f14);
+  border: 1px solid #8b6914;
+  border-radius: 10px;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  box-shadow: 0 4px 20px #0006;
+  box-shadow: 0 4px 12px #0008;
 }
 
 .game-card .emoji {
@@ -175,14 +189,18 @@ body {
   text-align: center;
   color: var(--muted);
   font-size: 0.85rem;
-  border-top: 1px solid #ffffff15;
+  border-top: 1px solid #5c4a3244;
 }
 
+/* In-game layout: header + stage + info + controls must fit in viewport */
 .game-shell {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden;
 }
 
 .game-header {
@@ -190,20 +208,23 @@ body {
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  background: #120020;
+  padding-top: max(8px, env(safe-area-inset-top));
   flex-shrink: 0;
+  border-bottom: 2px solid #8b6914;
 }
 
 .game-header h2 {
   margin: 0;
   font-size: 1rem;
   flex: 1;
+  font-weight: 600;
 }
 
 .game-stage {
-  flex: 1;
+  flex: 1 1 auto;
   position: relative;
   min-height: 0;
+  overflow: hidden;
   touch-action: none;
 }
 
@@ -217,23 +238,70 @@ body {
 .game-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px;
-  background: #0f001a;
-  border-top: 1px solid #ffffff15;
+  gap: 8px;
+  padding: 10px 8px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
   justify-content: center;
+  align-items: center;
+  border-top: 2px solid #5c4a32;
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
 .game-controls .btn {
-  flex: 1 1 auto;
-  max-width: 120px;
+  flex: 1 1 72px;
+  max-width: 140px;
 }
 
 .info-bar {
-  padding: 4px 10px;
+  padding: 6px 10px;
   font-size: 0.8rem;
   color: var(--muted);
   text-align: center;
+  flex-shrink: 0;
+  background: #00000033;
+}
+
+/* Per-game classic themes */
+.theme-blackjack .game-header,
+.theme-blackjack .game-controls {
+  background: linear-gradient(180deg, #1e4d32, #163d28);
+}
+
+.theme-blackjack .info-bar {
+  background: #0f2a1c;
+  color: #b8d4c4;
+}
+
+.theme-poker .game-header,
+.theme-poker .game-controls {
+  background: linear-gradient(180deg, #3d2817, #2a1a0f);
+}
+
+.theme-poker .info-bar {
+  background: #1a1008;
+  color: #d4c4a8;
+}
+
+.theme-mahjong .game-header,
+.theme-mahjong .game-controls {
+  background: linear-gradient(180deg, #2a4a5c, #1e3544);
+}
+
+.theme-mahjong .info-bar {
+  background: #152530;
+  color: #c8dce8;
+}
+
+.theme-uno .game-header,
+.theme-uno .game-controls {
+  background: linear-gradient(180deg, #1a3d6b, #122a4d);
+}
+
+.theme-uno .info-bar {
+  background: #0d1f38;
+  color: #b8cce0;
 }
 
 .modal-backdrop {
@@ -249,7 +317,7 @@ body {
 
 .modal {
   background: var(--panel);
-  border: 1px solid var(--neon-pink);
+  border: 2px solid #8b6914;
   border-radius: 12px;
   padding: 16px;
   max-width: 320px;
@@ -264,6 +332,24 @@ body {
 
 .color-picker .btn {
   width: 100%;
+}
+
+.color-picker .btn-red {
+  background: #c62828;
+  border-color: #8e0000;
+}
+.color-picker .btn-yellow {
+  background: #f9a825;
+  border-color: #c17900;
+  color: #222;
+}
+.color-picker .btn-green {
+  background: #2e7d32;
+  border-color: #1b5e20;
+}
+.color-picker .btn-blue {
+  background: #1565c0;
+  border-color: #0d47a1;
 }
 
 .fps-meter {
@@ -292,5 +378,6 @@ body {
   .game-controls .btn {
     font-size: 0.75rem;
     padding: 6px 8px;
+    min-height: 44px;
   }
 }

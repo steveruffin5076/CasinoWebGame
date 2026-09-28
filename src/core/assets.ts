@@ -60,9 +60,9 @@ export function drawPlayingCard(
   ctx.translate(-w / 2, -h / 2);
 
   const r = 8;
-  ctx.fillStyle = card.faceUp ? '#faf8ff' : '#1a0a3a';
-  ctx.strokeStyle = '#ff2bd6';
-  ctx.lineWidth = 2;
+  ctx.fillStyle = card.faceUp ? '#fffef8' : '#1a3a6e';
+  ctx.strokeStyle = card.faceUp ? '#333' : '#c9a227';
+  ctx.lineWidth = card.faceUp ? 1 : 2;
   roundRect(ctx, 0, 0, w, h, r);
   ctx.fill();
   ctx.stroke();
@@ -79,9 +79,9 @@ export function drawPlayingCard(
     ctx.font = `bold ${Math.floor(h * 0.22)}px system-ui`;
     ctx.fillText(card.rank, w - 6, h - 8);
   } else {
-    ctx.strokeStyle = '#ff2bd680';
-    for (let i = 0; i < 4; i++) {
-      ctx.strokeRect(8 + i * 3, 8 + i * 3, w - 16 - i * 6, h - 16 - i * 6);
+    ctx.strokeStyle = '#ffffff44';
+    for (let i = 0; i < 3; i++) {
+      ctx.strokeRect(10 + i * 4, 10 + i * 4, w - 20 - i * 8, h - 20 - i * 8);
     }
   }
   ctx.restore();

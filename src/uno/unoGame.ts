@@ -16,7 +16,7 @@ interface Player {
 
 export function mountUno(root: HTMLElement): () => void {
   const shell = document.createElement('div');
-  shell.className = 'game-shell';
+  shell.className = 'game-shell theme-uno';
   shell.innerHTML = `<div class="game-header"><button class="btn btn-small" id="uno-back">← Lobby</button><h2>🃏 UNO Classic</h2><span id="uno-score"></span></div><div class="game-stage" id="uno-stage"></div><div class="info-bar" id="uno-info"></div><div class="game-controls" id="uno-ctrl"></div>`;
   root.appendChild(shell);
 
@@ -24,7 +24,7 @@ export function mountUno(root: HTMLElement): () => void {
   const info = shell.querySelector('#uno-info') as HTMLElement;
   const ctrl = shell.querySelector('#uno-ctrl') as HTMLElement;
   const scoreEl = shell.querySelector('#uno-score') as HTMLElement;
-  const host = new GameHost(stage);
+  const host = new GameHost(stage, '#1e4d7b');
 
   let deck: UnoCard[] = [];
   let discard: UnoCard[] = [];
@@ -223,7 +223,7 @@ export function mountUno(root: HTMLElement): () => void {
     const grid = modal.querySelector('.color-picker')!;
     for (const col of ['red', 'yellow', 'green', 'blue'] as UnoColor[]) {
       const b = document.createElement('button');
-      b.className = 'btn';
+      b.className = `btn btn-${col}`;
       b.textContent = col;
       b.onclick = () => {
         backdrop.remove();
@@ -236,7 +236,7 @@ export function mountUno(root: HTMLElement): () => void {
   }
 
   host.start((ctx, _dt, w, h) => {
-    ctx.fillStyle = '#1a0a40';
+    ctx.fillStyle = '#1e4d7b';
     ctx.fillRect(0, 0, w, h);
     const cw = Math.min(56, w * 0.11);
     const ch = cw * 1.45;

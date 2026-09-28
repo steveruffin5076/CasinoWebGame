@@ -20,7 +20,7 @@ interface Seat {
 
 export function mountBlackjack(root: HTMLElement): () => void {
   const shell = document.createElement('div');
-  shell.className = 'game-shell';
+  shell.className = 'game-shell theme-blackjack';
   shell.innerHTML = `<div class="game-header"><button class="btn btn-small" id="bj-back">← Lobby</button><h2>♠️ Blackjack</h2><span id="bj-bal"></span></div><div class="game-stage" id="bj-stage"></div><div class="info-bar" id="bj-info">Place your bet</div><div class="game-controls" id="bj-ctrl"></div>`;
   root.appendChild(shell);
 
@@ -28,7 +28,7 @@ export function mountBlackjack(root: HTMLElement): () => void {
   const info = shell.querySelector('#bj-info') as HTMLElement;
   const ctrl = shell.querySelector('#bj-ctrl') as HTMLElement;
   const balEl = shell.querySelector('#bj-bal') as HTMLElement;
-  const host = new GameHost(stage);
+  const host = new GameHost(stage, '#0d5c36');
 
   let shoe: PlayingCard[] = [];
   let dealt = 0;
@@ -252,7 +252,7 @@ export function mountBlackjack(root: HTMLElement): () => void {
       addChips(humanWin);
       recordWin(humanWin, 'blackjack');
       playWin();
-      host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 80, ['#ffd54f', '#ff2bd6', '#00f5ff']);
+      host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 80, ['#c9a227', '#fff', '#1b6b3a']);
       host.addFloatText(stage.clientWidth / 2, stage.clientHeight / 3, `+${humanWin}`);
     } else if (humanWin < 0) {
       playLose();
@@ -274,9 +274,9 @@ export function mountBlackjack(root: HTMLElement): () => void {
   window.addEventListener('keydown', onKey);
 
   host.start((ctx, _dt, w, h) => {
-    ctx.fillStyle = '#0d4a2a';
+    ctx.fillStyle = '#0d5c36';
     ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = '#ff2bd644';
+    ctx.strokeStyle = '#8b691466';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.ellipse(w / 2, h * 0.55, w * 0.42, h * 0.35, 0, 0, Math.PI * 2);
