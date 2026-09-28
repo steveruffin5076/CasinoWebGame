@@ -294,16 +294,6 @@ body {
   color: #c8dce8;
 }
 
-.theme-uno .game-header,
-.theme-uno .game-controls {
-  background: linear-gradient(180deg, #1a3d6b, #122a4d);
-}
-
-.theme-uno .info-bar {
-  background: #0d1f38;
-  color: #b8cce0;
-}
-
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -332,24 +322,6 @@ body {
 
 .color-picker .btn {
   width: 100%;
-}
-
-.color-picker .btn-red {
-  background: #c62828;
-  border-color: #8e0000;
-}
-.color-picker .btn-yellow {
-  background: #f9a825;
-  border-color: #c17900;
-  color: #222;
-}
-.color-picker .btn-green {
-  background: #2e7d32;
-  border-color: #1b5e20;
-}
-.color-picker .btn-blue {
-  background: #1565c0;
-  border-color: #0d47a1;
 }
 
 .fps-meter {

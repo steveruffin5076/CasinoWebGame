@@ -33,7 +33,6 @@ const DEFAULT: SaveData = {
       blackjack: 'normal',
       poker: 'normal',
       mahjong: 'normal',
-      uno: 'normal',
     },
   },
   stats: {

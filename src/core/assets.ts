@@ -36,7 +36,7 @@ export function getLoadProgress(): number {
 }
 
 export async function preloadAssets(onProgress: (p: number, label: string) => void): Promise<void> {
-  const steps = ['Cards', 'Chips', 'Mahjong', 'UNO', 'Tables'];
+  const steps = ['Cards', 'Chips', 'Mahjong', 'Tables'];
   for (let i = 0; i < steps.length; i++) {
     progress = (i + 1) / steps.length;
     onProgress(progress, steps[i]);
@@ -195,69 +195,5 @@ export function drawMahjongTile(ctx: CanvasRenderingContext2D, t: MahjongTile, x
         ? ({ red: '中', green: '發', white: '白' } as Record<string, string>)[t.value as string]
         : `${t.value}`;
   ctx.fillText(label, x + w / 2, y + h / 2);
-  ctx.restore();
-}
-
-export type UnoColor = 'red' | 'yellow' | 'green' | 'blue' | 'wild';
-export type UnoKind = 'number' | 'skip' | 'reverse' | 'draw2' | 'wild' | 'wild4';
-
-export interface UnoCard {
-  color: UnoColor;
-  kind: UnoKind;
-  value: number;
-  id: string;
-}
-
-export function createUnoDeck(): UnoCard[] {
-  const colors: UnoColor[] = ['red', 'yellow', 'green', 'blue'];
-  const deck: UnoCard[] = [];
-  let id = 0;
-  for (const color of colors) {
-    deck.push({ color, kind: 'number', value: 0, id: `u${id++}` });
-    for (let v = 1; v <= 9; v++) {
-      deck.push({ color, kind: 'number', value: v, id: `u${id++}` });
-      deck.push({ color, kind: 'number', value: v, id: `u${id++}` });
-    }
-    for (const kind of ['skip', 'reverse', 'draw2'] as UnoKind[]) {
-      deck.push({ color, kind, value: 0, id: `u${id++}` });
-      deck.push({ color, kind, value: 0, id: `u${id++}` });
-    }
-  }
-  for (let i = 0; i < 4; i++) {
-    deck.push({ color: 'wild', kind: 'wild', value: 0, id: `u${id++}` });
-    deck.push({ color: 'wild', kind: 'wild4', value: 0, id: `u${id++}` });
-  }
-  return deck;
-}
-
-const UNO_HEX: Record<UnoColor, string> = {
-  red: '#e53935',
-  yellow: '#fdd835',
-  green: '#43a047',
-  blue: '#1e88e5',
-  wild: '#222',
-};
-
-export function drawUnoCard(ctx: CanvasRenderingContext2D, card: UnoCard, x: number, y: number, w: number, h: number): void {
-  ctx.save();
-  const col = UNO_HEX[card.color];
-  roundRect(ctx, x, y, w, h, 10);
-  ctx.fillStyle = col;
-  ctx.fill();
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  ctx.fillStyle = card.color === 'yellow' ? '#222' : '#fff';
-  ctx.font = `bold ${Math.floor(h * 0.28)}px system-ui`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  let text = '';
-  if (card.kind === 'number') text = String(card.value);
-  else if (card.kind === 'skip') text = '⊘';
-  else if (card.kind === 'reverse') text = '⇄';
-  else if (card.kind === 'draw2') text = '+2';
-  else if (card.kind === 'wild') text = 'W';
-  else text = '+4';
-  ctx.fillText(text, x + w / 2, y + h / 2);
   ctx.restore();
 }

@@ -2,8 +2,7 @@ export type Route =
   | { name: 'lobby' }
   | { name: 'blackjack' }
   | { name: 'poker' }
-  | { name: 'mahjong' }
-  | { name: 'uno' };
+  | { name: 'mahjong' };
 
 type Listener = (route: Route) => void;
 

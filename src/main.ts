@@ -6,7 +6,6 @@ import { renderLobby } from './lobby/lobby';
 import { mountBlackjack } from './blackjack/blackjackGame';
 import { mountPoker } from './poker/pokerGame';
 import { mountMahjong } from './mahjong/mahjongGame';
-import { mountUno } from './uno/unoGame';
 import { resumeAudio } from './core/audio';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -50,7 +49,6 @@ async function boot(): Promise<void> {
     if (route.name === 'blackjack') unmountGame = mountBlackjack(app);
     if (route.name === 'poker') unmountGame = mountPoker(app);
     if (route.name === 'mahjong') unmountGame = mountMahjong(app);
-    if (route.name === 'uno') unmountGame = mountUno(app);
   });
 
   renderLobby(app);

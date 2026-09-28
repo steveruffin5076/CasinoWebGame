@@ -1,10 +1,10 @@
 # Neon Casino
 
-Virtual-chips casino lobby with **Blackjack**, **Texas Hold'em**, **Hong Kong Mahjong**, and **UNO Classic** — single-player vs AI bots. Offline-first, no backend, no real money.
+Virtual-chips casino lobby with **Blackjack**, **Texas Hold'em**, and **Hong Kong Mahjong** — single-player vs AI bots. Offline-first, no backend, no real money.
 
 ## Tech choice (3 lines)
 
-**Vite + TypeScript + HTML Canvas** keeps the bundle small for GitHub Pages while giving full control over 60fps card animations (GPU transforms, particle pools) without loading Phaser for four distinct UIs. The lobby uses responsive DOM; each game mounts a canvas stage with shared core utilities (audio, storage, FPS). This split is easier to maintain than four Phaser scenes yet still hits performance targets on mobile.
+**Vite + TypeScript + HTML Canvas** keeps the bundle small for GitHub Pages while giving full control over 60fps card animations (GPU transforms, particle pools) without loading Phaser for multiple game UIs. The lobby uses responsive DOM; each game mounts a canvas stage with shared core utilities (audio, storage, FPS). This split is easier to maintain than separate Phaser scenes yet still hits performance targets on mobile.
 
 ## Run locally
 
@@ -54,7 +54,6 @@ src/
   blackjack/  ♠️
   poker/      ♥️ + handEval
   mahjong/    🀄 + rules
-  uno/        🃏
   ai/         bot logic per game
 ```
 

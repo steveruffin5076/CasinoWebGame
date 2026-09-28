@@ -18,7 +18,6 @@ const GAMES: { id: string; name: string; emoji: string; route: Route['name'] }[]
   { id: 'blackjack', name: 'Blackjack', emoji: '♠️', route: 'blackjack' },
   { id: 'poker', name: "Texas Hold'em", emoji: '♥️', route: 'poker' },
   { id: 'mahjong', name: 'Hong Kong Mahjong', emoji: '🀄', route: 'mahjong' },
-  { id: 'uno', name: 'UNO Classic', emoji: '🃏', route: 'uno' },
 ];
 
 export function renderLobby(root: HTMLElement): void {
