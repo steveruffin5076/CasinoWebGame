@@ -26,8 +26,9 @@ export class BettingRound {
     this.pending.clear();
     for (let i = 0; i < this.n; i++) {
       const p = this.players[i];
-      if (!p.folded && !p.allIn && i !== raiserIdx) this.pending.add(i);
+      if (!p.folded && !p.allIn) this.pending.add(i);
     }
+    this.pending.delete(raiserIdx);
   }
 
   onFold(idx: number): void {

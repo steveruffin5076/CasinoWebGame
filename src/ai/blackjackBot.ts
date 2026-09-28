@@ -33,7 +33,7 @@ export function basicStrategy(
     if (r === '9' && ![7, 10, 11].includes(d)) return 'split';
     if (r === '7' && d <= 7) return 'split';
     if (r === '6' && d <= 6) return 'split';
-    if (r === '4' && d === 5 || d === 6) return 'split';
+    if (r === '4' && (d === 5 || d === 6)) return 'split';
     if (r === '3' || r === '2') {
       if (d <= 7) return 'split';
     }

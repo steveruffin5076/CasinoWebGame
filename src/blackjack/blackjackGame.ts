@@ -162,12 +162,13 @@ export function mountBlackjack(root: HTMLElement): () => void {
       }
       dealer.push(drawCard(round === 0));
     }
-    if (dealer[0].rank === 'A') insuranceOffer = true;
     activeHand = 0;
-
     const playerBj = isBlackjack(seats[0].hands[0]);
+    if (dealer[0].rank === 'A' && !playerBj) insuranceOffer = true;
+
     if (playerBj) {
       seats[0].stood[0] = true;
+      insuranceOffer = false;
       info.textContent = 'Blackjack!';
       renderControls();
       await runBotsThenDealer();

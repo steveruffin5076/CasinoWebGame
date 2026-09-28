@@ -130,6 +130,8 @@ export function mountMahjong(root: HTMLElement): () => void {
       if (p.human) continue;
       const diff = getDifficulty('mahjong');
       if (botShouldWin(p.hand, tile)) {
+        p.hand.push(tile);
+        p.hand = sortHand(p.hand);
         win(p, false);
         return;
       }
@@ -232,12 +234,16 @@ export function mountMahjong(root: HTMLElement): () => void {
       const p = players[current];
       if (drawFor(p)) return;
       await delay(600);
-      if (!expectsDiscard(p.hand.length)) continue;
+      if (!expectsDiscard(p.hand.length)) {
+        if (wall.length === 0) break;
+        continue;
+      }
       const tile = botDiscard(p.hand, getDifficulty('mahjong'));
       discard(p, tile);
-      if (current === 0 || lastDiscard) return;
+      if (current === 0) return;
     }
     if (current === 0) humanTurn();
+    else if (wall.length === 0) info.textContent = 'Wall empty — round ends in a draw.';
   }
 
   function win(p: MJPlayer, selfDraw: boolean): void {

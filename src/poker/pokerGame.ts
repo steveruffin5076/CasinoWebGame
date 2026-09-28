@@ -288,15 +288,18 @@ export function mountPoker(root: HTMLElement): () => void {
 
   function award(winners: PokerPlayer[]): void {
     if (!winners.length) return;
-    const share = Math.floor(pot / winners.length);
-    let remainder = pot - share * winners.length;
+    const totalPot = pot;
+    const share = Math.floor(totalPot / winners.length);
+    let remainder = totalPot - share * winners.length;
     for (const w of winners) {
       w.stack += share + (remainder > 0 ? 1 : 0);
       if (remainder > 0) remainder--;
     }
     const humanWon = winners.some((w) => w.human);
     if (humanWon) {
-      recordWin(share, 'poker');
+      const humanPortion =
+        winners.length === 1 && winners[0].human ? totalPot : share * winners.filter((w) => w.human).length;
+      recordWin(humanPortion, 'poker');
       playWin();
       host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 60, ['#c9a227', '#fff']);
     }
@@ -305,7 +308,7 @@ export function mountPoker(root: HTMLElement): () => void {
       winners.length === 1
         ? evaluateHand([...winners[0].hole, ...community]).rank
         : 'split pot';
-    info.textContent = `${names} win ${pot} (${rank})`;
+    info.textContent = `${names} win ${totalPot} (${rank})`;
     pot = 0;
     renderPot();
     ctrl.innerHTML = '<button class="btn btn-primary" id="pk-next">Next Hand</button>';
