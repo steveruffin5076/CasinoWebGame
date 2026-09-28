@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview --base /CasinoWebGame/"
+    "build:itch": "tsc && vite build --config vite.config.itch.ts",
+    "package:itch": "npm run build:itch && mkdir -p release && rm -f release/grand-felt-casino-itch.zip && cd dist-itch && zip -rq ../release/grand-felt-casino-itch.zip .",
+    "preview": "vite preview --base /CasinoWebGame/",
+    "preview:itch": "vite preview --config vite.config.itch.ts"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

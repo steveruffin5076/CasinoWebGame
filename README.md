@@ -23,6 +23,14 @@ npm run build
 
 Output is in `dist/`.
 
+### itch.io
+
+```bash
+npm run package:itch
+```
+
+Upload `release/grand-felt-casino-itch.zip` — see [ITCH.md](./ITCH.md).
+
 ## GitHub Pages
 
 1. Push this repo to GitHub.
