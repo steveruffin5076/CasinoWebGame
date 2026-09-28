@@ -41,6 +41,7 @@ export function mountSlots(root: HTMLElement): () => void {
   let bet = 50;
   let spinning = false;
   let offset = [0, 0, 0];
+  let spinTimer: ReturnType<typeof setInterval> | null = null;
 
   function spin(): void {
     if (spinning) return;
@@ -49,13 +50,16 @@ export function mountSlots(root: HTMLElement): () => void {
     updateBal();
     recordGamePlayed();
     spinning = true;
+    renderCtrl();
     let t = 0;
-    const iv = setInterval(() => {
+    if (spinTimer) clearInterval(spinTimer);
+    spinTimer = setInterval(() => {
       reels = [rollSymbol(), rollSymbol(), rollSymbol()];
       offset = offset.map((o) => o + 12);
       t++;
       if (t > 18) {
-        clearInterval(iv);
+        if (spinTimer) clearInterval(spinTimer);
+        spinTimer = null;
         spinning = false;
         const win = payout(reels[0], reels[1], reels[2], bet);
         if (win > 0) {
@@ -68,6 +72,7 @@ export function mountSlots(root: HTMLElement): () => void {
           info.textContent = `${reels.join(' ')} — Try again`;
         }
         updateBal();
+        renderCtrl();
       }
     }, 80);
   }
@@ -120,6 +125,7 @@ export function mountSlots(root: HTMLElement): () => void {
   info.textContent = 'Pick bet and SPIN';
 
   return () => {
+    if (spinTimer) clearInterval(spinTimer);
     host.destroy();
     shell.remove();
   };

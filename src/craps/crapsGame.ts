@@ -25,6 +25,7 @@ export function mountCraps(root: HTMLElement): () => void {
   let betOn = false;
   let dice: [number, number] = [1, 1];
   let rolling = false;
+  let rollTimer: ReturnType<typeof setInterval> | null = null;
 
   function resolve(sum: number): void {
     if (!betOn) return;
@@ -72,14 +73,18 @@ export function mountCraps(root: HTMLElement): () => void {
       recordGamePlayed();
     }
     rolling = true;
+    renderCtrl();
     let n = 0;
-    const iv = setInterval(() => {
+    if (rollTimer) clearInterval(rollTimer);
+    rollTimer = setInterval(() => {
       dice = roll2d6();
       n++;
       if (n > 10) {
-        clearInterval(iv);
+        if (rollTimer) clearInterval(rollTimer);
+        rollTimer = null;
         rolling = false;
         resolve(dice[0] + dice[1]);
+        renderCtrl();
       }
     }, 60);
   }
@@ -104,19 +109,6 @@ export function mountCraps(root: HTMLElement): () => void {
     shootBtn.disabled = rolling;
     shootBtn.onclick = () => shoot();
     ctrl.appendChild(shootBtn);
-    if (betOn && phase === 'point') {
-      const clear = document.createElement('button');
-      clear.className = 'btn btn-small';
-      clear.textContent = 'New shooter';
-      clear.onclick = () => {
-        phase = 'comeOut';
-        point = 0;
-        betOn = false;
-        info.textContent = 'Come-out roll — bet Pass Line';
-        renderCtrl();
-      };
-      ctrl.appendChild(clear);
-    }
   }
 
   host.start((ctx, _dt, w, h) => {
@@ -149,6 +141,7 @@ export function mountCraps(root: HTMLElement): () => void {
   info.textContent = 'Pass Line — Come-out: 7/11 win, 2/3/12 lose';
 
   return () => {
+    if (rollTimer) clearInterval(rollTimer);
     host.destroy();
     shell.remove();
   };

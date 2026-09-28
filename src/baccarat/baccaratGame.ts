@@ -22,7 +22,7 @@ export function mountBaccarat(root: HTMLElement): () => void {
   let betAmt = 0;
   let player: BaccaratCard[] = [];
   let banker: BaccaratCard[] = [];
-  let phase: 'bet' | 'reveal' | 'end' = 'bet';
+  let phase: 'bet' | 'end' = 'bet';
   let resultText = '';
 
   function drawRankLabel(r: number): string {
@@ -98,11 +98,13 @@ export function mountBaccarat(root: HTMLElement): () => void {
     }
     for (const amt of [10, 50, 100, 500]) {
       const b = document.createElement('button');
-      b.className = 'btn btn-small';
+      b.className = `btn btn-small ${betAmt === amt ? 'active' : ''}`;
       b.textContent = String(amt);
+      b.disabled = phase !== 'bet';
       b.onclick = () => {
         betAmt = amt;
         playChip();
+        renderCtrl();
       };
       ctrl.appendChild(b);
     }

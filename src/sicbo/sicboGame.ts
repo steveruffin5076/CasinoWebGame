@@ -42,6 +42,7 @@ export function mountSicBo(root: HTMLElement): () => void {
   let betAmt = 50;
   let dice: [number, number, number] = [1, 1, 1];
   let shaking = false;
+  let shakeTimer: ReturnType<typeof setInterval> | null = null;
 
   function roll(): void {
     if (!bet || shaking) return;
@@ -50,12 +51,15 @@ export function mountSicBo(root: HTMLElement): () => void {
     updateBal();
     recordGamePlayed();
     shaking = true;
+    renderCtrl();
     let n = 0;
-    const iv = setInterval(() => {
+    if (shakeTimer) clearInterval(shakeTimer);
+    shakeTimer = setInterval(() => {
       dice = rollDice();
       n++;
       if (n > 12) {
-        clearInterval(iv);
+        if (shakeTimer) clearInterval(shakeTimer);
+        shakeTimer = null;
         shaking = false;
         const win = payout(bet!, dice, betAmt);
         const sum = dice[0] + dice[1] + dice[2];
@@ -69,6 +73,7 @@ export function mountSicBo(root: HTMLElement): () => void {
           info.textContent = `${dice.join('-')} (sum ${sum}) — Loss`;
         }
         updateBal();
+        renderCtrl();
       }
     }, 70);
   }
@@ -92,6 +97,7 @@ export function mountSicBo(root: HTMLElement): () => void {
       b.onclick = () => {
         bet = { kind };
         playChip();
+        renderCtrl();
       };
       ctrl.appendChild(b);
     }
@@ -102,13 +108,14 @@ export function mountSicBo(root: HTMLElement): () => void {
       b.onclick = () => {
         bet = { kind: 'total', n: t };
         playChip();
+        renderCtrl();
       };
       ctrl.appendChild(b);
     }
     const rollBtn = document.createElement('button');
     rollBtn.className = 'btn btn-primary';
     rollBtn.textContent = shaking ? 'Rolling…' : 'Roll dice';
-    rollBtn.disabled = shaking;
+    rollBtn.disabled = shaking || !bet;
     rollBtn.onclick = () => roll();
     ctrl.appendChild(rollBtn);
   }
@@ -136,6 +143,7 @@ export function mountSicBo(root: HTMLElement): () => void {
   info.textContent = 'Choose bet, then Roll dice';
 
   return () => {
+    if (shakeTimer) clearInterval(shakeTimer);
     host.destroy();
     shell.remove();
   };

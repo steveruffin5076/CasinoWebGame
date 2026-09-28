@@ -25,6 +25,7 @@ export function mountRoulette(root: HTMLElement): () => void {
   let spinning = false;
   let lastNum = -1;
   let anim = 0;
+  let spinRaf = 0;
 
   function pays(kind: BetKind, n: number): number {
     if (kind.type === 'straight') return kind.n === n ? 36 : 0;
@@ -45,6 +46,7 @@ export function mountRoulette(root: HTMLElement): () => void {
     updateBal();
     recordGamePlayed();
     spinning = true;
+    renderCtrl();
     anim = 0;
     const target = Math.floor(Math.random() * 37);
     const frames = 60;
@@ -53,9 +55,10 @@ export function mountRoulette(root: HTMLElement): () => void {
       f++;
       anim = f / frames;
       lastNum = f < frames ? Math.floor(Math.random() * 37) : target;
-      if (f < frames) requestAnimationFrame(tick);
+      if (f < frames) spinRaf = requestAnimationFrame(tick);
       else {
         spinning = false;
+        spinRaf = 0;
         const mult = pays(bet!, target);
         if (mult > 0) {
           const win = betAmt * mult;
@@ -68,9 +71,10 @@ export function mountRoulette(root: HTMLElement): () => void {
           info.textContent = `Ball on ${target} — Loss`;
         }
         updateBal();
+        renderCtrl();
       }
     };
-    requestAnimationFrame(tick);
+    spinRaf = requestAnimationFrame(tick);
   }
 
   function renderCtrl(): void {
@@ -154,6 +158,7 @@ export function mountRoulette(root: HTMLElement): () => void {
   info.textContent = 'Pick a bet, then Spin (European 0–36)';
 
   return () => {
+    if (spinRaf) cancelAnimationFrame(spinRaf);
     host.destroy();
     shell.remove();
   };
