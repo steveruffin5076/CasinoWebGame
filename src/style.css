@@ -314,6 +314,30 @@ body {
   width: 100%;
 }
 
+.tutorial-modal {
+  max-width: min(92vw, 420px);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.tutorial-modal h3 {
+  margin: 0 0 12px;
+  color: var(--accent-gold);
+}
+
+.tutorial-body p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--accent-cream);
+}
+
+.tutorial-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .color-picker {
   display: grid;
   grid-template-columns: 1fr 1fr;

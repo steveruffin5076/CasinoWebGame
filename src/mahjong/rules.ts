@@ -93,3 +93,25 @@ export function scoreHand(hand: MahjongTile[], selfDraw: boolean): { total: numb
 export function pointsFromFan(fan: number): number {
   return Math.pow(2, fan) * 10;
 }
+
+/** Tiles to remove from hand for a chow including the called discard */
+export function findChowTiles(hand: MahjongTile[], called: MahjongTile): MahjongTile[] | null {
+  if (called.suit === 'wind' || called.suit === 'dragon') return null;
+  const v = called.value as number;
+  const suit = called.suit;
+  const fromHand = (value: number): MahjongTile | undefined =>
+    hand.find((t) => t.suit === suit && t.value === value);
+
+  const tries: [number, number][] = [
+    [v - 2, v - 1],
+    [v - 1, v + 1],
+    [v + 1, v + 2],
+  ];
+  for (const [a, b] of tries) {
+    if (a < 1 || b > 9) continue;
+    const t1 = fromHand(a);
+    const t2 = fromHand(b);
+    if (t1 && t2 && t1.id !== t2.id) return [t1, t2];
+  }
+  return null;
+}

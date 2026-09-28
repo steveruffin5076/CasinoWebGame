@@ -6,15 +6,15 @@ import { botAction, handTotal, isBlackjack, type BJAction } from '../ai/blackjac
 import { addChips, getChips, recordGamePlayed, recordWin } from '../core/chips';
 import { playChip, playDeal, playFlip, playWin, playLose } from '../core/audio';
 import { navigate } from '../core/router';
+import { addTutorialButton, showTutorial } from '../core/tutorial';
 
 interface Seat {
   name: string;
   isHuman: boolean;
   cards: PlayingCard[];
   bet: number;
-  hands: PlayingCard[][]; // split support
+  hands: PlayingCard[][];
   handBets: number[];
-  done: boolean[];
   stood: boolean[];
 }
 
@@ -23,6 +23,10 @@ export function mountBlackjack(root: HTMLElement): () => void {
   shell.className = 'game-shell theme-blackjack';
   shell.innerHTML = `<div class="game-header"><button class="btn btn-small" id="bj-back">← Lobby</button><h2>♠️ Blackjack</h2><span id="bj-bal"></span></div><div class="game-stage" id="bj-stage"></div><div class="info-bar" id="bj-info">Place your bet</div><div class="game-controls" id="bj-ctrl"></div>`;
   root.appendChild(shell);
+
+  const header = shell.querySelector('.game-header') as HTMLElement;
+  addTutorialButton(header, 'blackjack');
+  showTutorial('blackjack');
 
   const stage = shell.querySelector('#bj-stage') as HTMLElement;
   const info = shell.querySelector('#bj-info') as HTMLElement;
@@ -36,9 +40,10 @@ export function mountBlackjack(root: HTMLElement): () => void {
   let dealer: PlayingCard[] = [];
   let humanBet = 0;
   let phase: 'bet' | 'play' | 'dealer' | 'end' = 'bet';
-  let activeSeat = 0;
   let activeHand = 0;
   let insuranceOffer = false;
+  let insuranceBet = 0;
+
   function freshShoe(): void {
     shoe = shuffle(createDeck(6));
     dealt = 0;
@@ -75,7 +80,7 @@ export function mountBlackjack(root: HTMLElement): () => void {
       deal.textContent = 'Deal';
       deal.onclick = () => startHand();
       ctrl.appendChild(deal);
-    } else if (phase === 'play' && activeSeat === 0) {
+    } else if (phase === 'play') {
       const h = seats[0].hands[activeHand];
       const { total } = handTotal(h);
       if (total < 21 && !seats[0].stood[activeHand]) {
@@ -89,9 +94,10 @@ export function mountBlackjack(root: HTMLElement): () => void {
         }
       }
       if (insuranceOffer) {
-        addBtn('Insurance', () => {
+        addBtn('Insurance', takeInsurance);
+        addBtn('No Insurance', () => {
           insuranceOffer = false;
-          info.textContent = 'Insurance taken (side bet)';
+          renderControls();
         });
       }
     } else if (phase === 'end') {
@@ -101,11 +107,24 @@ export function mountBlackjack(root: HTMLElement): () => void {
       again.onclick = () => {
         phase = 'bet';
         humanBet = 0;
+        insuranceBet = 0;
         renderControls();
         info.textContent = 'Place your bet';
       };
       ctrl.appendChild(again);
     }
+  }
+
+  function takeInsurance(): void {
+    const cost = Math.floor(seats[0].handBets[0] / 2);
+    if (cost > 0 && getChips() >= cost) {
+      insuranceBet = cost;
+      addChips(-cost);
+      updateBal();
+    }
+    insuranceOffer = false;
+    info.textContent = insuranceBet ? `Insurance ${insuranceBet} placed` : 'No insurance';
+    renderControls();
   }
 
   function addBtn(label: string, fn: () => void): void {
@@ -124,11 +143,12 @@ export function mountBlackjack(root: HTMLElement): () => void {
     addChips(-humanBet);
     updateBal();
     recordGamePlayed();
+    insuranceBet = 0;
     seats = [
-      { name: 'You', isHuman: true, cards: [], bet: humanBet, hands: [[]], handBets: [humanBet], done: [false], stood: [false] },
-      { name: 'Bot A', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], done: [false], stood: [false] },
-      { name: 'Bot B', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], done: [false], stood: [false] },
-      { name: 'Bot C', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], done: [false], stood: [false] },
+      { name: 'You', isHuman: true, cards: [], bet: humanBet, hands: [[]], handBets: [humanBet], stood: [false] },
+      { name: 'Bot A', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], stood: [false] },
+      { name: 'Bot B', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], stood: [false] },
+      { name: 'Bot C', isHuman: false, cards: [], bet: 50, hands: [[]], handBets: [50], stood: [false] },
     ];
     dealer = [];
     phase = 'play';
@@ -143,13 +163,17 @@ export function mountBlackjack(root: HTMLElement): () => void {
       dealer.push(drawCard(round === 0));
     }
     if (dealer[0].rank === 'A') insuranceOffer = true;
-    activeSeat = 0;
     activeHand = 0;
-    renderControls();
-    if (isBlackjack(seats[0].hands[0])) {
+
+    const playerBj = isBlackjack(seats[0].hands[0]);
+    if (playerBj) {
+      seats[0].stood[0] = true;
       info.textContent = 'Blackjack!';
+      renderControls();
       await runBotsThenDealer();
+      return;
     }
+    renderControls();
   }
 
   async function runBotsThenDealer(): Promise<void> {
@@ -186,7 +210,6 @@ export function mountBlackjack(root: HTMLElement): () => void {
       seat.hands.push([second]);
       seat.handBets.push(seat.handBets[0]);
       seat.stood.push(false);
-      seat.done.push(false);
       h.push(drawCard(true));
       seat.hands[1].push(drawCard(true));
       addChips(-seat.handBets[0]);
@@ -233,35 +256,43 @@ export function mountBlackjack(root: HTMLElement): () => void {
     phase = 'end';
     const dt = handTotal(dealer).total;
     const dealerBj = isBlackjack(dealer);
-    let humanWin = 0;
+    let credit = 0;
+    let totalWager = 0;
+
     for (let hi = 0; hi < seats[0].hands.length; hi++) {
       const h = seats[0].hands[hi];
       const bet = seats[0].handBets[hi];
+      totalWager += bet;
       const { total } = handTotal(h);
       const bj = isBlackjack(h) && h.length === 2;
-      let delta = 0;
-      if (total > 21) delta = -bet;
-      else if (dealerBj && bj) delta = 0;
-      else if (bj) delta = Math.floor(bet * 1.5);
-      else if (dealerBj) delta = -bet;
-      else if (dt > 21 || total > dt) delta = bet;
-      else if (total < dt) delta = -bet;
-      humanWin += delta;
+
+      if (total > 21) {
+        /* lost */
+      } else if (dealerBj && bj) credit += bet;
+      else if (bj) credit += bet + Math.floor(bet * 1.5);
+      else if (dealerBj) {
+        /* lost main */
+      } else if (dt > 21 || total > dt) credit += bet * 2;
+      else if (total === dt) credit += bet;
     }
-    if (humanWin > 0) {
-      addChips(humanWin);
-      recordWin(humanWin, 'blackjack');
+
+    if (insuranceBet > 0 && dealerBj) credit += insuranceBet * 3;
+
+    addChips(credit);
+    const net = credit - totalWager - insuranceBet;
+
+    if (net > 0) {
+      recordWin(net, 'blackjack');
       playWin();
       host.particles.burst(stage.clientWidth / 2, stage.clientHeight / 2, 80, ['#c9a227', '#fff', '#1b6b3a']);
-      host.addFloatText(stage.clientWidth / 2, stage.clientHeight / 3, `+${humanWin}`);
-    } else if (humanWin < 0) {
+      host.addFloatText(stage.clientWidth / 2, stage.clientHeight / 3, `+${net}`);
+    } else if (net < 0) {
       playLose();
-      host.addFloatText(stage.clientWidth / 2, stage.clientHeight / 3, `${humanWin}`);
-    } else {
-      for (let hi = 0; hi < seats[0].handBets.length; hi++) addChips(seats[0].handBets[hi]);
+      host.addFloatText(stage.clientWidth / 2, stage.clientHeight / 3, `${net}`);
     }
+
     updateBal();
-    info.textContent = `Dealer ${dt} — You ${humanWin >= 0 ? 'win' : 'lose'} ${Math.abs(humanWin)}`;
+    info.textContent = `Dealer ${dt} — ${net >= 0 ? 'Win' : 'Loss'} ${Math.abs(net)} chips`;
     renderControls();
   }
 
@@ -285,7 +316,6 @@ export function mountBlackjack(root: HTMLElement): () => void {
     const cw = Math.min(48, w * 0.08);
     const ch = cw * 1.4;
 
-    // dealer
     dealer.forEach((c, i) => drawPlayingCard(ctx, c, w / 2 - 40 + i * (cw * 0.5), h * 0.2, cw, ch));
 
     const seatY = [h * 0.75, h * 0.55, h * 0.4, h * 0.55];

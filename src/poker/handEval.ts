@@ -117,3 +117,14 @@ export function handStrengthScore(hole: PlayingCard[], community: PlayingCard[])
 export function compareHands(a: PlayingCard[], b: PlayingCard[]): number {
   return evaluateHand(a).score - evaluateHand(b).score;
 }
+
+export function findShowdownWinners(
+  contenders: { playerIndex: number; cards: PlayingCard[] }[],
+): number[] {
+  if (!contenders.length) return [];
+  let best = evaluateHand(contenders[0].cards).score;
+  for (const c of contenders) {
+    best = Math.max(best, evaluateHand(c.cards).score);
+  }
+  return contenders.filter((c) => evaluateHand(c.cards).score === best).map((c) => c.playerIndex);
+}

@@ -13,6 +13,7 @@ import { formatChips, formatCountdown } from '../core/utils';
 import { navigate, type Route } from '../core/router';
 import { toggleMute, isMuted, resumeAudio, playClick } from '../core/audio';
 import { setHighFpsMode, isHighFpsMode } from '../core/fps';
+import { showTutorial, type TutorialGame } from '../core/tutorial';
 
 const GAMES: { id: string; name: string; emoji: string; route: Route['name'] }[] = [
   { id: 'blackjack', name: 'Blackjack', emoji: '♠️', route: 'blackjack' },
@@ -84,7 +85,7 @@ export function renderLobby(root: HTMLElement): void {
 
   const title = document.createElement('h1');
   title.className = 'lobby-title';
-  title.textContent = '✨ Neon Casino ✨';
+  title.textContent = '✨ Classic Casino ✨';
 
   const grid = document.createElement('div');
   grid.className = 'game-grid';
@@ -117,7 +118,12 @@ export function renderLobby(root: HTMLElement): void {
       navigate({ name: g.route });
     };
 
-    card.append(diffRow, play);
+    const help = document.createElement('button');
+    help.className = 'btn btn-small';
+    help.textContent = 'Tutorial';
+    help.onclick = () => showTutorial(g.id as TutorialGame, true);
+
+    card.append(diffRow, play, help);
     grid.appendChild(card);
   }
 
