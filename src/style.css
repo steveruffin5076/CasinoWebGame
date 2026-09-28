@@ -177,6 +177,36 @@ body {
   font-size: 1rem;
 }
 
+.game-card .muted {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.game-card-guide {
+  border-color: #6b5a3a;
+  background: linear-gradient(145deg, #2a2418, #221c14);
+}
+
+.section-title {
+  margin: 24px 0 6px;
+  font-size: 1.15rem;
+  color: var(--accent-gold);
+  text-align: center;
+  font-weight: 600;
+}
+
+.section-hint {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.guide-grid {
+  margin-bottom: 8px;
+}
+
 .diff-row {
   display: flex;
   gap: 4px;

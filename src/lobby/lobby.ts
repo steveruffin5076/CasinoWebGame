@@ -13,7 +13,7 @@ import { formatChips, formatCountdown } from '../core/utils';
 import { navigate, type Route } from '../core/router';
 import { toggleMute, isMuted, resumeAudio, playClick } from '../core/audio';
 import { setHighFpsMode, isHighFpsMode } from '../core/fps';
-import { showTutorial, type TutorialGame } from '../core/tutorial';
+import { showTutorial, GUIDE_GAMES, type PlayableTutorialGame } from '../core/tutorial';
 
 const GAMES: { id: string; name: string; emoji: string; route: Route['name'] }[] = [
   { id: 'blackjack', name: 'Blackjack', emoji: '♠️', route: 'blackjack' },
@@ -121,16 +121,43 @@ export function renderLobby(root: HTMLElement): void {
     const help = document.createElement('button');
     help.className = 'btn btn-small';
     help.textContent = 'Tutorial';
-    help.onclick = () => showTutorial(g.id as TutorialGame, true);
+    help.onclick = () => showTutorial(g.id as PlayableTutorialGame, true);
 
     card.append(diffRow, play, help);
     grid.appendChild(card);
+  }
+
+  const guidesTitle = document.createElement('h2');
+  guidesTitle.className = 'section-title';
+  guidesTitle.textContent = 'Casino game guides';
+
+  const guidesHint = document.createElement('p');
+  guidesHint.className = 'section-hint';
+  guidesHint.textContent = 'Learn classic table games — rules only (coming soon as playable tables).';
+
+  const guideGrid = document.createElement('div');
+  guideGrid.className = 'game-grid guide-grid';
+
+  for (const g of GUIDE_GAMES) {
+    const card = document.createElement('div');
+    card.className = 'game-card game-card-guide';
+    card.innerHTML = `<span class="emoji">${g.emoji}</span><h3>${g.name}</h3><p class="muted">Rules & how to play</p>`;
+
+    const rules = document.createElement('button');
+    rules.className = 'btn btn-primary';
+    rules.textContent = 'Read tutorial';
+    rules.onclick = () => {
+      playClick();
+      showTutorial(g.id, true);
+    };
+    card.append(rules);
+    guideGrid.appendChild(card);
   }
 
   const footer = document.createElement('div');
   footer.className = 'stats-footer';
   footer.textContent = `Games played: ${save.stats.gamesPlayed} · Biggest win: ${formatChips(save.stats.biggestWin)} chips`;
 
-  lobby.append(title, grid, footer);
+  lobby.append(title, grid, guidesTitle, guidesHint, guideGrid, footer);
   root.append(top, lobby);
 }

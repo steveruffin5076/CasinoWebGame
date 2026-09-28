@@ -19,7 +19,9 @@ export interface SaveData {
   lastDailyBonus: number;
   settings: GameSettings;
   stats: PlayerStats;
-  tutorialsSeen?: Partial<Record<'blackjack' | 'poker' | 'mahjong', boolean>>;
+  tutorialsSeen?: Partial<
+    Record<'blackjack' | 'poker' | 'mahjong' | 'baccarat' | 'craps' | 'roulette' | 'slots' | 'sicbo', boolean>
+  >;
 }
 
 const KEY = 'neon-casino-save-v1';

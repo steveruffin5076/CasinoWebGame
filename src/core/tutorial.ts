@@ -1,6 +1,12 @@
 import { loadSave, writeSave } from './storage';
 
-export type TutorialGame = 'blackjack' | 'poker' | 'mahjong';
+/** Games you can play in the app */
+export type PlayableTutorialGame = 'blackjack' | 'poker' | 'mahjong';
+
+/** Rules guides (tutorial only — not playable yet) */
+export type GuideTutorialGame = 'baccarat' | 'craps' | 'roulette' | 'slots' | 'sicbo';
+
+export type TutorialGame = PlayableTutorialGame | GuideTutorialGame;
 
 const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
   blackjack: {
@@ -33,9 +39,78 @@ const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
 • Each turn: Draw from the wall, then discard one tile (tap tile, tap again or drag up).
 • Calls on a discard (8s timer): Win (Hu), Pung (triplet), Chow (sequence — only from player above you), or Pass.
 • Scoring uses Fan (simplified HK rules); cap 13 Fan. Self-draw: everyone pays; win on discard: discarder pays.
-• Sort orders your hand. Match is 4 East rounds (one wind); Leave ends the session and shows results.`,
+• Sort orders your hand. Match is 4 East rounds per wind (4 winds total).`,
+  },
+  baccarat: {
+    title: 'How to play Baccarat',
+    body: `Goal: Bet on which hand totals closer to 9 — Player or Banker (or Tie).
+
+• Two hands are dealt: Player and Banker. You do not play the cards yourself.
+• Card values: Ace = 1, 2–9 = face value, 10/J/Q/K = 0. Only the last digit counts (e.g. 15 = 5).
+• A third card may be drawn for each side by fixed rules (no choices).
+• Common bets: Player (1:1), Banker (1:1 minus 5% commission), Tie (often 8:1 or 9:1).
+• Natural: 8 or 9 on the first two cards can end the round immediately.
+• In real casinos this is a fast table game; here this guide is for learning rules only. Virtual chips only — no real money.`,
+  },
+  craps: {
+    title: 'How to play Craps',
+    body: `Goal: Bet on the outcome of dice rolls on the craps table.
+
+• The shooter rolls two dice. First roll (Come Out): 7 or 11 wins for Pass Line; 2, 3, or 12 loses (craps).
+• Any other number (4–6, 8–10) becomes the Point; shooter tries to roll it again before a 7.
+• Pass Line: bet with the shooter. Don't Pass: bet against the shooter (slightly different rules on 12).
+• Place bets, Field, Hardways, and Proposition bets cover specific numbers or combinations.
+• Multi-roll bets stay up until they win, lose, or you take them down.
+• Table etiquette: do not touch dice with your hands in live play; in digital play, tap bet areas then Roll.
+• This guide explains standard Las Vegas-style rules for learning; playable craps may be added later.`,
+  },
+  roulette: {
+    title: 'How to play Roulette',
+    body: `Goal: Predict where the ball will land on a numbered wheel (0 and 1–36 on European; extra 00 on American).
+
+• Inside bets: straight up (one number), split, street, corner, line — higher payouts, lower odds.
+• Outside bets: Red/Black, Odd/Even, 1–18/19–36, Dozens, Columns — lower payouts, better coverage.
+• European wheel has one zero (house edge ~2.7% on even-money bets). American has 0 and 00 (~5.26%).
+• Place chips on the layout before "No more bets." Winning bets are paid per the paytable.
+• Neighbors and racetrack bets group numbers on some tables.
+• No skill changes where the ball lands — bankroll and bet sizing matter for session length only.`,
+  },
+  slots: {
+    title: 'How to play Slot Machines',
+    body: `Goal: Spin reels and match symbols on paylines (or cluster/ways games) to win credits.
+
+• Choose bet per spin (coin value × lines or fixed ways). Press Spin or tap the reels.
+• Paytable shows symbol values and bonus rules. Wild substitutes; Scatter often triggers free spins.
+• RTP (Return to Player) is a long-term average — short sessions can vary wildly.
+• Progressive jackpots grow from a small share of each bet until someone hits the top combo.
+• Volatility: low = frequent small wins; high = rare large hits.
+• Set a session budget in virtual chips. Slots are pure chance; no pattern predicts the next spin.`,
+  },
+  sicbo: {
+    title: 'How to play Sic Bo',
+    body: `Goal: Bet on the outcome of three dice rolled in a cage or cup.
+
+• Small: total 4–10 (not triple). Big: total 11–17 (not triple). Even money minus house edge.
+• Specific Triple: all three dice show the same chosen number — high payout.
+• Any Triple: any triple — lower payout than specific triple.
+• Total bets: wager on exact sum (e.g. 10) with payouts by probability.
+• Combination: two specific numbers appear on at least two of the three dice.
+• Single die: bet one number; pays more if it appears 2 or 3 times.
+• Shake and reveal; all winning spots are paid. Common in Macau and Asia; virtual chips only here.`,
   },
 };
+
+export const GUIDE_GAMES: { id: GuideTutorialGame; name: string; emoji: string }[] = [
+  { id: 'baccarat', name: 'Baccarat', emoji: '🎴' },
+  { id: 'craps', name: 'Craps', emoji: '🎲' },
+  { id: 'roulette', name: 'Roulette', emoji: '🎡' },
+  { id: 'slots', name: 'Slot Machines', emoji: '🎰' },
+  { id: 'sicbo', name: 'Sic Bo', emoji: '🔮' },
+];
+
+export function isPlayableGame(id: string): id is PlayableTutorialGame {
+  return id === 'blackjack' || id === 'poker' || id === 'mahjong';
+}
 
 export function hasSeenTutorial(game: TutorialGame): boolean {
   return !!loadSave().tutorialsSeen?.[game];
@@ -77,7 +152,7 @@ export function showTutorial(game: TutorialGame, force = false): void {
   document.body.appendChild(backdrop);
 }
 
-export function addTutorialButton(header: HTMLElement, game: TutorialGame): void {
+export function addTutorialButton(header: HTMLElement, game: PlayableTutorialGame): void {
   const btn = document.createElement('button');
   btn.className = 'btn btn-small';
   btn.textContent = '?';
