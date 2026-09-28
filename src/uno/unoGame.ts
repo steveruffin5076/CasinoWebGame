@@ -247,27 +247,58 @@ export function mountUno(root: HTMLElement): () => void {
     ctx.textAlign = 'center';
     ctx.fillText(`Color: ${currentColor} | Deck: ${deck.length}`, w / 2, h * 0.32);
 
-    const positions = [
-      { x: w / 2, y: h - ch - 20 },
-      { x: 20, y: h * 0.35 },
-      { x: w / 2, y: 20 },
-      { x: w - cw - 20, y: h * 0.35 },
-    ];
+    const padX = Math.max(12, w * 0.05);
+    const padY = Math.max(12, h * 0.04);
+    const playerY = h - ch - padY;
+    const sideY = h * 0.32;
+    const miniW = cw * 0.6;
+    const miniH = ch * 0.6;
+
     players.forEach((pl, i) => {
       if (i === 0) {
         const startX = (w - pl.hand.length * (cw * 0.55)) / 2;
         pl.hand.forEach((c, ci) => {
-          const y = positions[i].y - (selected === ci ? 14 : 0);
+          const y = playerY - (selected === ci ? 14 : 0);
           drawUnoCard(ctx, c, startX + ci * cw * 0.55, y, cw, ch);
         });
-      } else {
-        ctx.fillStyle = '#fff';
-        ctx.fillText(`${pl.name} (${pl.hand.length})`, positions[i].x, positions[i].y);
-        for (let j = 0; j < Math.min(5, pl.hand.length); j++) {
-          ctx.fillStyle = '#222';
-          ctx.fillRect(positions[i].x + j * 4, positions[i].y, cw * 0.6, ch * 0.6);
-        }
+        return;
       }
+
+      const label = `${pl.name} (${pl.hand.length})`;
+      ctx.fillStyle = '#fff';
+      ctx.font = '14px system-ui';
+
+      let labelX = w / 2;
+      let cardX = w / 2 - miniW / 2;
+      let labelY = padY + 14;
+
+      if (i === 1) {
+        ctx.textAlign = 'left';
+        labelX = padX;
+        labelY = sideY;
+        cardX = padX;
+      } else if (i === 2) {
+        ctx.textAlign = 'center';
+        labelY = padY + 14;
+        cardX = w / 2 - miniW / 2;
+      } else if (i === 3) {
+        ctx.textAlign = 'right';
+        labelX = w - padX;
+        labelY = sideY;
+        cardX = w - padX - miniW - Math.min(4, pl.hand.length - 1) * 4;
+      }
+
+      ctx.fillText(label, labelX, labelY);
+      const stackY = labelY + 8;
+      for (let j = 0; j < Math.min(5, pl.hand.length); j++) {
+        ctx.fillStyle = '#1a1a2e';
+        ctx.strokeStyle = '#c9a227';
+        ctx.lineWidth = 1;
+        const ox = i === 3 ? cardX - j * 4 : cardX + j * 4;
+        ctx.fillRect(ox, stackY, miniW, miniH);
+        ctx.strokeRect(ox, stackY, miniW, miniH);
+      }
+      ctx.textAlign = 'center';
     });
   });
 
