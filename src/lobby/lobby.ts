@@ -13,12 +13,19 @@ import { formatChips, formatCountdown } from '../core/utils';
 import { navigate, type Route } from '../core/router';
 import { toggleMute, isMuted, resumeAudio, playClick } from '../core/audio';
 import { setHighFpsMode, isHighFpsMode } from '../core/fps';
-import { showTutorial, GUIDE_GAMES, type PlayableTutorialGame } from '../core/tutorial';
+import { showTutorial, type PlayableTutorialGame } from '../core/tutorial';
+
+const HOUSE_GAMES = new Set(['baccarat', 'craps', 'roulette', 'slots', 'sicbo']);
 
 const GAMES: { id: string; name: string; emoji: string; route: Route['name'] }[] = [
   { id: 'blackjack', name: 'Blackjack', emoji: '♠️', route: 'blackjack' },
   { id: 'poker', name: "Texas Hold'em", emoji: '♥️', route: 'poker' },
   { id: 'mahjong', name: 'Hong Kong Mahjong', emoji: '🀄', route: 'mahjong' },
+  { id: 'baccarat', name: 'Baccarat', emoji: '🎴', route: 'baccarat' },
+  { id: 'craps', name: 'Craps', emoji: '🎲', route: 'craps' },
+  { id: 'roulette', name: 'Roulette', emoji: '🎡', route: 'roulette' },
+  { id: 'slots', name: 'Slots', emoji: '🎰', route: 'slots' },
+  { id: 'sicbo', name: 'Sic Bo', emoji: '🔮', route: 'sicbo' },
 ];
 
 export function renderLobby(root: HTMLElement): void {
@@ -98,15 +105,22 @@ export function renderLobby(root: HTMLElement): void {
 
     const diffRow = document.createElement('div');
     diffRow.className = 'diff-row';
-    for (const d of ['easy', 'normal', 'hard'] as BotDifficulty[]) {
-      const b = document.createElement('button');
-      b.className = `btn btn-small ${getDifficulty(g.id) === d ? 'active' : ''}`;
-      b.textContent = d[0].toUpperCase() + d.slice(1);
-      b.onclick = () => {
-        setDifficulty(g.id, d);
-        renderLobby(root);
-      };
-      diffRow.appendChild(b);
+    if (!HOUSE_GAMES.has(g.id)) {
+      for (const d of ['easy', 'normal', 'hard'] as BotDifficulty[]) {
+        const b = document.createElement('button');
+        b.className = `btn btn-small ${getDifficulty(g.id) === d ? 'active' : ''}`;
+        b.textContent = d[0].toUpperCase() + d.slice(1);
+        b.onclick = () => {
+          setDifficulty(g.id, d);
+          renderLobby(root);
+        };
+        diffRow.appendChild(b);
+      }
+    } else {
+      const tag = document.createElement('span');
+      tag.className = 'muted';
+      tag.textContent = 'vs house';
+      diffRow.appendChild(tag);
     }
 
     const play = document.createElement('button');
@@ -127,37 +141,10 @@ export function renderLobby(root: HTMLElement): void {
     grid.appendChild(card);
   }
 
-  const guidesTitle = document.createElement('h2');
-  guidesTitle.className = 'section-title';
-  guidesTitle.textContent = 'Casino game guides';
-
-  const guidesHint = document.createElement('p');
-  guidesHint.className = 'section-hint';
-  guidesHint.textContent = 'Learn classic table games — rules only (coming soon as playable tables).';
-
-  const guideGrid = document.createElement('div');
-  guideGrid.className = 'game-grid guide-grid';
-
-  for (const g of GUIDE_GAMES) {
-    const card = document.createElement('div');
-    card.className = 'game-card game-card-guide';
-    card.innerHTML = `<span class="emoji">${g.emoji}</span><h3>${g.name}</h3><p class="muted">Rules & how to play</p>`;
-
-    const rules = document.createElement('button');
-    rules.className = 'btn btn-primary';
-    rules.textContent = 'Read tutorial';
-    rules.onclick = () => {
-      playClick();
-      showTutorial(g.id, true);
-    };
-    card.append(rules);
-    guideGrid.appendChild(card);
-  }
-
   const footer = document.createElement('div');
   footer.className = 'stats-footer';
   footer.textContent = `Games played: ${save.stats.gamesPlayed} · Biggest win: ${formatChips(save.stats.biggestWin)} chips`;
 
-  lobby.append(title, grid, guidesTitle, guidesHint, guideGrid, footer);
+  lobby.append(title, grid, footer);
   root.append(top, lobby);
 }

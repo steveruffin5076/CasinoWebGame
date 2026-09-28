@@ -1,12 +1,16 @@
 import { loadSave, writeSave } from './storage';
 
-/** Games you can play in the app */
-export type PlayableTutorialGame = 'blackjack' | 'poker' | 'mahjong';
+export type PlayableTutorialGame =
+  | 'blackjack'
+  | 'poker'
+  | 'mahjong'
+  | 'baccarat'
+  | 'craps'
+  | 'roulette'
+  | 'slots'
+  | 'sicbo';
 
-/** Rules guides (tutorial only — not playable yet) */
-export type GuideTutorialGame = 'baccarat' | 'craps' | 'roulette' | 'slots' | 'sicbo';
-
-export type TutorialGame = PlayableTutorialGame | GuideTutorialGame;
+export type TutorialGame = PlayableTutorialGame;
 
 const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
   blackjack: {
@@ -50,7 +54,7 @@ const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
 • A third card may be drawn for each side by fixed rules (no choices).
 • Common bets: Player (1:1), Banker (1:1 minus 5% commission), Tie (often 8:1 or 9:1).
 • Natural: 8 or 9 on the first two cards can end the round immediately.
-• In real casinos this is a fast table game; here this guide is for learning rules only. Virtual chips only — no real money.`,
+• Tap chip amount, pick Player/Banker/Tie, then Deal. Banker wins pay 5% commission. Virtual chips only.`,
   },
   craps: {
     title: 'How to play Craps',
@@ -62,7 +66,7 @@ const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
 • Place bets, Field, Hardways, and Proposition bets cover specific numbers or combinations.
 • Multi-roll bets stay up until they win, lose, or you take them down.
 • Table etiquette: do not touch dice with your hands in live play; in digital play, tap bet areas then Roll.
-• This guide explains standard Las Vegas-style rules for learning; playable craps may be added later.`,
+• Tap Pass Line bet, then Roll. Come-out: 7/11 wins, 2/3/12 loses. Other numbers set the Point — roll it again before 7.`,
   },
   roulette: {
     title: 'How to play Roulette',
@@ -77,14 +81,11 @@ const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
   },
   slots: {
     title: 'How to play Slot Machines',
-    body: `Goal: Spin reels and match symbols on paylines (or cluster/ways games) to win credits.
+    body: `Goal: Match symbols on the center payline to win virtual chips.
 
-• Choose bet per spin (coin value × lines or fixed ways). Press Spin or tap the reels.
-• Paytable shows symbol values and bonus rules. Wild substitutes; Scatter often triggers free spins.
-• RTP (Return to Player) is a long-term average — short sessions can vary wildly.
-• Progressive jackpots grow from a small share of each bet until someone hits the top combo.
-• Volatility: low = frequent small wins; high = rare large hits.
-• Set a session budget in virtual chips. Slots are pure chance; no pattern predicts the next spin.`,
+• Pick bet (10–500), press SPIN.
+• Three matching symbols pay the most (💎 best). Any two matching pays 2× your bet.
+• Outcomes are random. Virtual chips only.`,
   },
   sicbo: {
     title: 'How to play Sic Bo',
@@ -96,21 +97,9 @@ const CONTENT: Record<TutorialGame, { title: string; body: string }> = {
 • Total bets: wager on exact sum (e.g. 10) with payouts by probability.
 • Combination: two specific numbers appear on at least two of the three dice.
 • Single die: bet one number; pays more if it appears 2 or 3 times.
-• Shake and reveal; all winning spots are paid. Common in Macau and Asia; virtual chips only here.`,
+• Pick bet type and amount, then Roll dice. Small/Big pay even money (triples lose). Any Triple pays 25×.`,
   },
 };
-
-export const GUIDE_GAMES: { id: GuideTutorialGame; name: string; emoji: string }[] = [
-  { id: 'baccarat', name: 'Baccarat', emoji: '🎴' },
-  { id: 'craps', name: 'Craps', emoji: '🎲' },
-  { id: 'roulette', name: 'Roulette', emoji: '🎡' },
-  { id: 'slots', name: 'Slot Machines', emoji: '🎰' },
-  { id: 'sicbo', name: 'Sic Bo', emoji: '🔮' },
-];
-
-export function isPlayableGame(id: string): id is PlayableTutorialGame {
-  return id === 'blackjack' || id === 'poker' || id === 'mahjong';
-}
 
 export function hasSeenTutorial(game: TutorialGame): boolean {
   return !!loadSave().tutorialsSeen?.[game];
