@@ -1,4 +1,4 @@
-# Neon Casino
+# Classic Casino
 
 Virtual-chips casino lobby with **Blackjack**, **Texas Hold'em**, and **Hong Kong Mahjong** — single-player vs AI bots. Offline-first, no backend, no real money.
 
@@ -44,6 +44,7 @@ For this repo: `https://steveruffin5076.github.io/CasinoWebGame/`
 - localStorage for balance, settings, stats
 - `?fps=1` shows FPS meter; auto-reduces particles if FPS drops
 - Mahjong: **136 tiles, no Flowers/Seasons** (documented simplification)
+- **Tutorial**: `?` in each game or **Tutorial** on lobby cards; first visit auto-opens once per game
 
 ## Project structure
 
