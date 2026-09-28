@@ -1,6 +1,6 @@
 # Classic Casino
 
-Virtual-chips casino lobby with **Blackjack**, **Texas Hold'em**, and **Hong Kong Mahjong** — single-player vs AI bots. Offline-first, no backend, no real money.
+Virtual-chips casino lobby with **eight table games**: **Blackjack**, **Texas Hold'em**, **Hong Kong Mahjong** (vs AI bots), plus **Baccarat**, **Craps**, **Roulette**, **Slots**, and **Sic Bo** (vs house). Offline-first, no backend, no real money.
 
 ## Tech choice (3 lines)
 
@@ -47,7 +47,7 @@ For this repo: `https://steveruffin5076.github.io/CasinoWebGame/`
 ## Features
 
 - Chip balance, daily bonus (+2,000 / 24h), free refill below 100 chips
-- Bot difficulty per game (Easy / Normal / Hard)
+- Bot difficulty for Blackjack, Poker, and Mahjong (Easy / Normal / Hard); house games play vs the table
 - Web Audio synthesized SFX + mute toggle
 - localStorage for balance, settings, stats
 - `?fps=1` shows FPS meter; auto-reduces particles if FPS drops
@@ -63,7 +63,12 @@ src/
   blackjack/  ♠️
   poker/      ♥️ + handEval
   mahjong/    🀄 + rules
-  ai/         bot logic per game
+  baccarat/   🎴
+  craps/      🎲
+  roulette/   🎡
+  slots/      🎰
+  sicbo/      🔮
+  ai/         bot logic (blackjack, poker, mahjong)
 ```
 
 ## License

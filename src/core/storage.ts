@@ -36,6 +36,11 @@ const DEFAULT: SaveData = {
       blackjack: 'normal',
       poker: 'normal',
       mahjong: 'normal',
+      baccarat: 'normal',
+      craps: 'normal',
+      roulette: 'normal',
+      slots: 'normal',
+      sicbo: 'normal',
     },
   },
   stats: {

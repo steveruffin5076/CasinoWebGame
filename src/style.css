@@ -324,6 +324,31 @@ body {
   color: #c8dce8;
 }
 
+.theme-baccarat .game-header,
+.theme-baccarat .game-controls {
+  background: linear-gradient(180deg, #5c4030, #3d2a1f);
+}
+
+.theme-craps .game-header,
+.theme-craps .game-controls {
+  background: linear-gradient(180deg, #2d6a8a, #24516b);
+}
+
+.theme-roulette .game-header,
+.theme-roulette .game-controls {
+  background: linear-gradient(180deg, #2a5c38, #1e4d2e);
+}
+
+.theme-slots .game-header,
+.theme-slots .game-controls {
+  background: linear-gradient(180deg, #4a2878, #2a1848);
+}
+
+.theme-sicbo .game-header,
+.theme-sicbo .game-controls {
+  background: linear-gradient(180deg, #5a4028, #3a2818);
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
